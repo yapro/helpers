@@ -1,6 +1,6 @@
 <?php
 
-class MultidimensionalArray
+class MultidimensionalArrays
 {
     /**
      * @param array $first
