@@ -1,4 +1,5 @@
 Computes the difference of multidimensional arrays using keys for comparison.
+---
 
 Example:
 ```

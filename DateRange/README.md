@@ -1,3 +1,6 @@
+DateRangeHelper can check is are a date in the dates range.
+---
+
 Example usage:
 
 ```
