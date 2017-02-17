@@ -8,23 +8,23 @@ function weekDaysDiff(\DateTime $date1, \DateTime $date2)
         $date1 = $date2;
         $date2 = $date1origin;
     }
-    $interval = DateInterval::createFromDateString('1 day');
+    $interval = \DateInterval::createFromDateString('1 day');
     /** @var \DateTime[] $period */
-    $period = new DatePeriod($date1, $interval, $date2);
+    $period = new \DatePeriod($date1, $interval, $date2);
     $weekdays = 0;
     foreach ($period as $date){
         if ($date->format('N') === '6' || $date->format('N') === '7'){
             $weekdays++;
         }
     }
-    $daysDifference = (int)$date1->diff($date2)->format('%a');
+    $daysDifference = filter_var($date1->diff($date2)->format('%a'), FILTER_VALIDATE_INT);
     if ($date1 < $date2 && ($date1->format('N') === '6' || $date1->format('N') === '7')){
         $daysDifference++;
     }
     return $daysDifference - $weekdays;
 }
 // tests:
-$date = new \DateTime('06.09.2016');
+$date = new \DateTime('03.09.2016');
 echo weekDaysDiff($date, $date) . PHP_EOL;
 echo weekDaysDiff($date, (clone $date)->modify('+1 weekdays')) . PHP_EOL;
 echo weekDaysDiff($date, (clone $date)->modify('+2 weekdays')) . PHP_EOL;
