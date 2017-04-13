@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Lib\Helper;
+namespace YaPro\Helper\Date;
 
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Common\Util\Debug;
 
 class DateRangeHelper

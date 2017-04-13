@@ -1,4 +1,4 @@
-Symfony Helpers
-==========
+Helpers
+---
 
-Classes which you can use as services.
+Classes for solving the most common problems.
