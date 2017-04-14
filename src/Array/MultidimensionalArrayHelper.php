@@ -1,6 +1,7 @@
 <?php
+namespace YaPro\Helper;
 
-class MultidimensionalArrays
+class MultidimensionalArrayHelper
 {
     /**
      * @param array $first

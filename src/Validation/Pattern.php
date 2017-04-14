@@ -1,4 +1,7 @@
 <?php
+
+namespace YaPro\Helper\Validation;
+
 /**
  * @param string $pattern
  * @return bool

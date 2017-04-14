@@ -1,6 +1,7 @@
 <?php
+namespace YaPro\Helper;
 
-class JsonUtility
+class JsonHelper
 {
     /**
      * Wrapper for JSON decode that implements error detection with helpful

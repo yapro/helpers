@@ -2,7 +2,9 @@
 
 namespace YaPro\Helper\Date;
 
-class DateTimeUtility
+use YaPro\Helper\Validation\ScalarValidator;
+
+class DateTimeHelper
 {
     /**
      * @param string $date
@@ -10,7 +12,7 @@ class DateTimeUtility
      * @return \DateTime
      * @throws \UnexpectedValueException
      */
-    public static function create($date, \DateTimeZone $timezone = NULL)
+    public static function create($date, \DateTimeZone $timezone = NULL): \DateTime
     {
         $dateTime = new \DateTime($date, $timezone);
         $result = \DateTime::getLastErrors();
@@ -26,7 +28,7 @@ class DateTimeUtility
      * @return \DateTimeImmutable
      * @throws \UnexpectedValueException
      */
-    public static function createImmutable($date, \DateTimeZone $timezone = NULL)
+    public static function createImmutable($date, \DateTimeZone $timezone = NULL): \DateTimeImmutable
     {
         $dateTime = new \DateTimeImmutable($date, $timezone);
         $result = \DateTimeImmutable::getLastErrors();
@@ -41,7 +43,7 @@ class DateTimeUtility
      * @param \DateTime $to
      * @return array
      */
-    public static function getMonthlyIntervals(\DateTime $from, \DateTime $to)
+    public static function getMonthlyIntervals(\DateTime $from, \DateTime $to): array
     {
         $intervals = [];
         $from = clone $from;
@@ -66,7 +68,7 @@ class DateTimeUtility
      * @param \DateTime $endDate
      * @return \DateTime[]
      */
-    public static function getIntervalDays(\DateTime $startDate, \DateTime $endDate)
+    public static function getIntervalDays(\DateTime $startDate, \DateTime $endDate): array
     {
         $days = [];
         $startDate = clone $startDate;
@@ -77,29 +79,29 @@ class DateTimeUtility
         return $days;
     }
 
-    public static function getDifferenceInWorkingDays(\DateTime $date1, \DateTime $date2)
+    /**
+     * @param array $dates
+     * @return \DateTime[]
+     */
+    public static function getDates(array $dates): array
     {
-        $date1 = (clone $date1)->setTime(0, 0, 0);
-        $date2 = (clone $date2)->setTime(0, 0, 0);
-        if ($date1 > $date2) {
-            $date1origin = $date1;
-            $date1 = $date2;
-            $date2 = $date1origin;
+        $result = [];
+        foreach ($dates as $date) {
+            $result[] = self::create($date);
         }
-        $interval = \DateInterval::createFromDateString('1 day');
-        /** @var \DateTime[] $period */
-        $period = new \DatePeriod($date1, $interval, $date2);
-        $weekdays = 0;
-        foreach ($period as $date) {
-            if ($date->format('N') === '6' || $date->format('N') === '7') {
-                $weekdays++;
-            }
-        }
-        $daysDifference = filter_var($date1->diff($date2)->format('%a'), FILTER_VALIDATE_INT);
-        if ($date1 < $date2 && ($date1->format('N') === '6' || $date1->format('N') === '7')) {
-            $daysDifference++;
-        }
+        return $result;
+    }
 
-        return $daysDifference - $weekdays;
+    /**
+     * @param \DateTime $date1
+     * @param \DateTime $date2
+     * @return int
+     */
+    public function getNumberDaysDiff(\DateTime $date1, \DateTime $date2): int
+    {
+        // between 2018-12-29 and 2018-12-29 diff = 0
+        // between 2018-12-29 and 2018-12-30 diff = 1
+        // between 2018-12-29 and 2018-12-31 diff = 2
+        return ScalarValidator::getInteger($date1->diff($date2)->format('%a'));
     }
 }
