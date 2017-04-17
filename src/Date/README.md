@@ -1,4 +1,4 @@
-DateRange
+Date Helpers
 ---
 
 DateRangeHelper can check is are a date in the dates range. Example usage:
@@ -13,7 +13,7 @@ try {
 }
 ```
 
-DateTimeUtility can help you to make a date`s object with validation of date. Example usage:
+DateTimeHelper can help you to make a date`s object with validation of date. Example usage:
 
 ```php
 <?php
