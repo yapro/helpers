@@ -4,6 +4,7 @@ namespace YaPro\Helper\Date;
 
 use PHPUnit\Framework\TestCase;
 use YaPro\Helper\FileHelper;
+use YaPro\Helper\TestHelper;
 
 /**
  * @coversDefaultClass \YaPro\Helper\Date\WorkdaysHelper
@@ -425,5 +426,30 @@ class WorkdaysHelperTest extends TestCase
             $date,
             $workdays
         ));
+    }
+
+    public function isWeekendProvider(): array
+    {
+        return [
+            [
+                'date' => DateTimeHelper::create('2018-01-19'),
+                'isWeekend' => false,
+            ],
+            [
+                'date' => DateTimeHelper::create('2018-01-20'),
+                'isWeekend' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider isWeekendProvider
+     * @covers ::isWeekend
+     * @param \DateTime $date
+     * @param bool $isWeekend
+     */
+    public function testIsWeekend(\DateTime $date, bool $isWeekend)
+    {
+        $this->assertSame($isWeekend, TestHelper::callClassMethod($this->workdaysHelper, 'isWeekend', [$date]));
     }
 }
