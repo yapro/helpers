@@ -5,8 +5,6 @@ namespace YaPro\Helper\Date;
 
 class WorkdaysHelper
 {
-    const SATURDAY = '6';
-    const SUNDAY = '7';
     /**
      * @var \DateTime[]
      */
@@ -17,10 +15,18 @@ class WorkdaysHelper
      */
     private $workdays;
 
-    public function __construct(array $holidays, array $workdays)
+    /**
+     * @var array
+     */
+    private $weekend = ['6', '7'];
+
+    public function __construct(array $holidays, array $workdays, array $weekend = [])
     {
         $this->holidays = $holidays;
         $this->workdays = $workdays;
+        if (!empty($weekend)){
+            $this->weekend = $weekend;
+        }
     }
 
     /**
@@ -29,7 +35,10 @@ class WorkdaysHelper
      */
     public function isWorkDay(\DateTime $date): bool
     {
-        return in_array($date, $this->workdays) || (!in_array($date, $this->holidays) && !$this->isWeekend($date));
+        if (in_array($date, $this->workdays)) {
+            return true;
+        }
+        return in_array($date, $this->holidays) || $this->isWeekend($date) ? false : true;
     }
 
     /**
@@ -65,7 +74,7 @@ class WorkdaysHelper
      */
     private function isWeekend(\DateTime $date): bool
     {
-        return $date->format('N') === self::SATURDAY || $date->format('N') === self::SUNDAY;
+        return in_array($date->format('N'), $this->weekend);
     }
 
     /**
@@ -78,13 +87,11 @@ class WorkdaysHelper
         if ($workdays === 0) {
             return $date;
         }
-        $someDate = clone $date;
         $sign = $workdays > 0 ? '' : '-';
         $workdaysAbsolute = abs($workdays);
         while ($workdaysAbsolute > 0) {
-            $someDate->modify($sign . '1 day');
-            if ($this->isWorkDay($someDate)) {
-                $date->modify($sign . '1 day');
+            $date->modify($sign . '1 day');
+            if ($this->isWorkDay($date)) {
                 $workdaysAbsolute--;
             }
         }

@@ -28,3 +28,28 @@ try {
     // ...
 }
 ```
+
+WorkdaysHelper can help you to working with work days. Example usage:
+
+```php
+<?php
+// setup
+$folder = realpath(__DIR__ . '/src/Date');
+$holidays = DateTimeHelper::getDates(
+    explode(PHP_EOL, FileHelper::getFileContent($folder . '/holidays.txt'))
+);
+$workdays = DateTimeHelper::getDates(
+    explode(PHP_EOL, FileHelper::getFileContent($folder . '/workdays.txt'))
+);
+$weekend = ['6', '7'];// ISO-8601 numeric representation of the day of the week
+$workdaysHelper = new WorkdaysHelper($holidays, $workdays, $weekend);
+// use
+$firstDate = DateTimeHelper::create('2000-01-01');
+$workdaysHelper->isWorkDay($firstDate);
+$workdaysHelper->getDateWithModifiedWorkdays($firstDate, -5);
+$secondDate = DateTimeHelper::create('2000-02-01');
+$workdaysHelper->getDifferenceInWorkingDays(
+    $firstDate,
+    $secondDate
+);
+```
