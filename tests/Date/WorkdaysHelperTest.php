@@ -35,10 +35,10 @@ class WorkdaysHelperTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $fixturesFolder = realpath(__DIR__ . '/../../src/Date');
-        $this->holidays = DateTimeHelper::getDates(
+        $this->holidays = DateTimeHelper::getDatesFromStringsArray(
             explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/holidays.txt'))
         );
-        $this->workdays = DateTimeHelper::getDates(
+        $this->workdays = DateTimeHelper::getDatesFromStringsArray(
             explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/workdays.txt'))
         );
         $this->workdaysHelper = new WorkdaysHelper($this->holidays, $this->workdays);

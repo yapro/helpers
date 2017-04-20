@@ -83,7 +83,7 @@ class DateTimeHelper
      * @param array $dates
      * @return \DateTime[]
      */
-    public static function getDates(array $dates): array
+    public static function getDatesFromStringsArray(array $dates): array
     {
         $result = [];
         foreach ($dates as $date) {

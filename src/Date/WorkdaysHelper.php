@@ -74,7 +74,7 @@ class WorkdaysHelper
      */
     private function isWeekend(\DateTime $date): bool
     {
-        return in_array($date->format('N'), $this->weekend);
+        return in_array($date->format('N'), $this->weekend, true);
     }
 
     /**
