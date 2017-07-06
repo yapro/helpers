@@ -11,7 +11,7 @@ class TestHelper
      * @param array|null $args
      * @return mixed
      */
-    public static function callClassMethod($object, $method, array $args = [])
+    public function callClassMethod($object, $method, array $args = [])
     {
         $class = new \ReflectionClass($object);
         $method = $class->getMethod($method);
@@ -24,7 +24,7 @@ class TestHelper
      * @param string $property
      * @param mixed $value
      */
-    public static function setClassPropertyValue($object, $property, $value)
+    public function setClassPropertyValue($object, $property, $value)
     {
         $class = new \ReflectionClass($object);
         $property = $class->getProperty($property);

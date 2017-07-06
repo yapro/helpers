@@ -21,7 +21,6 @@ final class CsvHelper
     }
     
     /**
-     * Возвращает содержимое файла
      * @param string $fileName Имя файла
      * @return array
      */

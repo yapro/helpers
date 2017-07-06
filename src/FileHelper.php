@@ -3,19 +3,13 @@ declare(strict_types=1);
 
 namespace YaPro\Helper;
 
-/**
- * Хелпер для работы с файлами
- * Class FileUtility
- * @package com\calltouch\api\utility
- */
-class FileHelper
+final class FileHelper
 {
     /**
-     * Возвращает содержимое файла
-     * @param string $fileName Имя файла
+     * @param string $fileName
      * @return string|false
      */
-    public static function getFileContent($fileName)
+    public function getFileContent($fileName)
     {
         $file = new \SplFileObject($fileName, "r");
         return $file->fread($file->getSize());

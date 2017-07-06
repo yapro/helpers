@@ -37,40 +37,39 @@ class DateTimeHelper
     }
 
     /**
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return array
+     * @param \DateTimeInterface $from
+     * @param \DateTimeInterface $to
+     * @return \DateTimeInterface[]
      */
-    public function getMonthlyIntervals(\DateTime $from, \DateTime $to): array
+    public function getMonthlyIntervals(\DateTimeInterface $from, \DateTimeInterface $to): array
     {
         $intervals = [];
         $from = clone $from;
         $to = clone $to;
-        $startDate = $from->modify('first day of this month');
-        $endDate = $to->modify('last day of this month');
+        $startDate = $from->modify('first day of this month')->setTime(0, 0, 0);
+        $endDate = $to->modify('last day of this month')->setTime(23, 59, 59);
         while ($startDate < $endDate) {
             $firstDay = clone $startDate;
-            $startDate->modify('last day of this month')->modify('+1 day')->modify('-1 second');
-            $lastDay = clone $startDate;
+            $startDate = $startDate->modify('last day of this month')->setTime(23, 59, 59);
             $intervals[] = [
                 'firstDay' => $firstDay,
-                'lastDay' => $lastDay,
+                'lastDay' => clone $startDate,
             ];
-            $startDate->modify('+1 second');
+            $startDate = $startDate->modify('+1 second');
         }
         return $intervals;
     }
 
     /**
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
-     * @return \DateTime[]
+     * @param \DateTimeInterface $startDate
+     * @param \DateTimeInterface $endDate
+     * @return \DateTimeImmutable[]
      */
-    public function getIntervalDays(\DateTime $startDate, \DateTime $endDate): array
+    public function getIntervalDays(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
     {
         $days = [];
         $startDate = clone $startDate;
-        while ($startDate < $endDate) {
+        while ($startDate <= $endDate) {
             $days[] = $startDate->setTime(0,0,0);
             $startDate = (clone $startDate)->modify('+1 day');
         }
@@ -91,11 +90,11 @@ class DateTimeHelper
     }
 
     /**
-     * @param \DateTime $date1
-     * @param \DateTime $date2
+     * @param \DateTimeInterface $date1
+     * @param \DateTimeInterface $date2
      * @return int
      */
-    public function getNumberDaysDiff(\DateTime $date1, \DateTime $date2): int
+    public function getNumberDaysDiff(\DateTimeInterface $date1, \DateTimeInterface $date2): int
     {
         // between 2018-12-29 and 2018-12-29 diff = 0
         // between 2018-12-29 and 2018-12-30 diff = 1
@@ -113,7 +112,7 @@ class DateTimeHelper
     public function getDateInTheDatesRange(string $date, string $minDate, string $maxDate)
     {
         $dateTime = $this->createImmutable($date);
-        if ($this->createImmutable($minDate) <= $dateTime && $dateTime >= $this->createImmutable($maxDate)) {
+        if ($this->createImmutable($minDate) <= $dateTime && $dateTime <= $this->createImmutable($maxDate)) {
             return $dateTime;
         }
         return null;

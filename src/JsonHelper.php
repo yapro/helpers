@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace YaPro\Helper;
 
 class JsonHelper
@@ -17,7 +19,7 @@ class JsonHelper
      * @throws \InvalidArgumentException if the JSON cannot be parsed.
      * @link http://www.php.net/manual/en/function.json-decode.php
      */
-    public static function jsonDecode($json, $assoc = false, $depth = 512, $options = 0)
+    public function jsonDecode($json, $assoc = false, $depth = 512, $options = 0)
     {
         $data = \json_decode($json, $assoc, $depth, $options);
         if (JSON_ERROR_NONE !== json_last_error()) {

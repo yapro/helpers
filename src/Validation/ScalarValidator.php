@@ -3,9 +3,6 @@ declare(strict_types = 1);
 
 namespace YaPro\Helper\Validation;
 
-/**
- * Class ScalarValidator
- */
 class ScalarValidator
 {
     /**
@@ -31,7 +28,7 @@ class ScalarValidator
      * @return int
      * @throws \TypeError
      */
-    public static function getInteger($value, array $allowedCharacters = []): int
+    public function getInteger($value, array $allowedCharacters = []): int
     {
         if (!empty($allowedCharacters) && in_array($value, $allowedCharacters)) {
             return 0;
@@ -59,7 +56,7 @@ class ScalarValidator
      * @param string $pattern
      * @return bool
      */
-    function isPatternValid($pattern)
+    public function isPatternValid($pattern)
     {
         set_error_handler(function() {}, E_WARNING);
         $isValid = preg_match($pattern, '') !== false;
