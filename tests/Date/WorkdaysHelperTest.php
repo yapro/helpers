@@ -31,18 +31,24 @@ class WorkdaysHelperTest extends TestCase
      */
     private $workdays;
 
+    /**
+     * @var DateTimeHelper
+     */
+    private $dateTimeHelper;
+
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
+        $this->dateTimeHelper = new DateTimeHelper();
         $fixturesFolder = realpath(__DIR__ . '/../../src/Date');
-        $this->holidays = DateTimeHelper::getDatesFromStringsArray(
+        $this->holidays = $this->dateTimeHelper->getDatesFromStringsArray(
             explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/holidays.txt'))
         );
-        $this->workdays = DateTimeHelper::getDatesFromStringsArray(
+        $this->workdays = $this->dateTimeHelper->getDatesFromStringsArray(
             explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/workdays.txt'))
         );
         $this->workdaysHelper = new WorkdaysHelper($this->holidays, $this->workdays);
-        $this->testDate = DateTimeHelper::create('03.09.2016');
+        $this->testDate = $this->dateTimeHelper->create('03.09.2016');
     }
 
     public function isWorkDayProvider()
@@ -62,12 +68,12 @@ class WorkdaysHelperTest extends TestCase
         }
         // standard day off
         $tests[] = [
-            'date' => DateTimeHelper::create('27.01.2018'),
+            'date' => $this->dateTimeHelper->create('27.01.2018'),
             'expectedResult' => false,
         ];
         // standard working day
         $tests[] = [
-            'date' => DateTimeHelper::create('01.02.2018'),
+            'date' => $this->dateTimeHelper->create('01.02.2018'),
             'expectedResult' => true,
         ];
         return $tests;
@@ -199,63 +205,63 @@ class WorkdaysHelperTest extends TestCase
                 'expectedResult' => 6,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2017-04-28'),
-                'secondDate' => DateTimeHelper::create('2017-05-02'),
+                'firstDate' => $this->dateTimeHelper->create('2017-04-28'),
+                'secondDate' => $this->dateTimeHelper->create('2017-05-02'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2017-04-28'),
-                'secondDate' => DateTimeHelper::create('2017-05-10'),
+                'firstDate' => $this->dateTimeHelper->create('2017-04-28'),
+                'secondDate' => $this->dateTimeHelper->create('2017-05-10'),
                 'expectedResult' => 6,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2017-06-09'),
-                'secondDate' => DateTimeHelper::create('2017-06-13'),
+                'firstDate' => $this->dateTimeHelper->create('2017-06-09'),
+                'secondDate' => $this->dateTimeHelper->create('2017-06-13'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2017-11-03'),
-                'secondDate' => DateTimeHelper::create('2017-11-07'),
+                'firstDate' => $this->dateTimeHelper->create('2017-11-03'),
+                'secondDate' => $this->dateTimeHelper->create('2017-11-07'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2017-12-29'),
-                'secondDate' => DateTimeHelper::create('2018-01-09'),
+                'firstDate' => $this->dateTimeHelper->create('2017-12-29'),
+                'secondDate' => $this->dateTimeHelper->create('2018-01-09'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-02-22'),
-                'secondDate' => DateTimeHelper::create('2018-02-26'),
+                'firstDate' => $this->dateTimeHelper->create('2018-02-22'),
+                'secondDate' => $this->dateTimeHelper->create('2018-02-26'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-03-07'),
-                'secondDate' => DateTimeHelper::create('2018-03-12'),
+                'firstDate' => $this->dateTimeHelper->create('2018-03-07'),
+                'secondDate' => $this->dateTimeHelper->create('2018-03-12'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-04-28'),
-                'secondDate' => DateTimeHelper::create('2018-05-03'),
+                'firstDate' => $this->dateTimeHelper->create('2018-04-28'),
+                'secondDate' => $this->dateTimeHelper->create('2018-05-03'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-04-28'),
-                'secondDate' => DateTimeHelper::create('2018-05-10'),
+                'firstDate' => $this->dateTimeHelper->create('2018-04-28'),
+                'secondDate' => $this->dateTimeHelper->create('2018-05-10'),
                 'expectedResult' => 6,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-06-09'),
-                'secondDate' => DateTimeHelper::create('2018-06-13'),
+                'firstDate' => $this->dateTimeHelper->create('2018-06-09'),
+                'secondDate' => $this->dateTimeHelper->create('2018-06-13'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-11-02'),
-                'secondDate' => DateTimeHelper::create('2018-11-06'),
+                'firstDate' => $this->dateTimeHelper->create('2018-11-02'),
+                'secondDate' => $this->dateTimeHelper->create('2018-11-06'),
                 'expectedResult' => 2,
             ],
             [
-                'firstDate' => DateTimeHelper::create('2018-12-29'),
-                'secondDate' => DateTimeHelper::create('2018-12-31'),
+                'firstDate' => $this->dateTimeHelper->create('2018-12-29'),
+                'secondDate' => $this->dateTimeHelper->create('2018-12-31'),
                 'expectedResult' => 1,
             ],
         ];
@@ -285,130 +291,130 @@ class WorkdaysHelperTest extends TestCase
                 'expectedDate' => $this->testDate,
             ],
             [// many holidays
-                'date' => DateTimeHelper::create('2018-01-01'),
+                'date' => $this->dateTimeHelper->create('2018-01-01'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-01-09'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-09'),
             ],
             [// date is friday
-                'date' => DateTimeHelper::create('2018-01-12'),
+                'date' => $this->dateTimeHelper->create('2018-01-12'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-01-15'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-15'),
             ],
             [// date is saturday
-                'date' => DateTimeHelper::create('2018-01-13'),
+                'date' => $this->dateTimeHelper->create('2018-01-13'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-01-15'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-15'),
             ],
             [// date is sunday
-                'date' => DateTimeHelper::create('2018-01-14'),
+                'date' => $this->dateTimeHelper->create('2018-01-14'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-01-15'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-15'),
             ],
             [// date and expectedDate are standard workdays
-                'date' => DateTimeHelper::create('2018-01-30'),
+                'date' => $this->dateTimeHelper->create('2018-01-30'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-01-31'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-31'),
             ],
             [// range between date and expectedDate has weekends and one holiday
-                'date' => DateTimeHelper::create('2018-02-22'),
+                'date' => $this->dateTimeHelper->create('2018-02-22'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-02-26'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-02-26'),
             ],
             [// range between date and expectedDate has weekends and two holidays
-                'date' => DateTimeHelper::create('2018-03-07'),
+                'date' => $this->dateTimeHelper->create('2018-03-07'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-03-12'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-03-12'),
             ],
             [// saturday is workday and range between date and expectedDate has one weekend and two days off
-                'date' => DateTimeHelper::create('2018-04-28'),
+                'date' => $this->dateTimeHelper->create('2018-04-28'),
                 'workdays' => 1,
-                'expectedDate' => DateTimeHelper::create('2018-05-03'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-05-03'),
             ],
             [// saturday is workday and range between date and expectedDate has one weekend and two days off
-                'date' => DateTimeHelper::create('2018-04-28'),
+                'date' => $this->dateTimeHelper->create('2018-04-28'),
                 'workdays' => 2,
-                'expectedDate' => DateTimeHelper::create('2018-05-04'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-05-04'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and two days off
-                'date' => DateTimeHelper::create('2018-04-28'),
+                'date' => $this->dateTimeHelper->create('2018-04-28'),
                 'workdays' => 3,
-                'expectedDate' => DateTimeHelper::create('2018-05-07'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-05-07'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and two days off
-                'date' => DateTimeHelper::create('2018-04-28'),
+                'date' => $this->dateTimeHelper->create('2018-04-28'),
                 'workdays' => 4,
-                'expectedDate' => DateTimeHelper::create('2018-05-08'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-05-08'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and three days off
-                'date' => DateTimeHelper::create('2018-04-28'),
+                'date' => $this->dateTimeHelper->create('2018-04-28'),
                 'workdays' => 5,
-                'expectedDate' => DateTimeHelper::create('2018-05-10'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-05-10'),
             ],
             //--------------- subtracting days ---------------:
             [// many holidays
-                'date' => DateTimeHelper::create('2018-01-01'),
+                'date' => $this->dateTimeHelper->create('2018-01-01'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2017-12-29'),
+                'expectedDate' => $this->dateTimeHelper->create('2017-12-29'),
             ],
             [// date is monday, expectedDate is friday
-                'date' => DateTimeHelper::create('2018-01-15'),
+                'date' => $this->dateTimeHelper->create('2018-01-15'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-01-12'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-12'),
             ],
             [// date is sunday, expectedDate is friday
-                'date' => DateTimeHelper::create('2018-01-14'),
+                'date' => $this->dateTimeHelper->create('2018-01-14'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-01-12'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-12'),
             ],
             [// date is saturday, expectedDate is friday
-                'date' => DateTimeHelper::create('2018-01-13'),
+                'date' => $this->dateTimeHelper->create('2018-01-13'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-01-12'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-12'),
             ],
             [// date and expectedDate are standard workdays
-                'date' => DateTimeHelper::create('2018-01-31'),
+                'date' => $this->dateTimeHelper->create('2018-01-31'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-01-30'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-30'),
             ],
             [// date and expectedDate are standard workdays
-                'date' => DateTimeHelper::create('2018-01-31'),
+                'date' => $this->dateTimeHelper->create('2018-01-31'),
                 'workdays' => -2,
-                'expectedDate' => DateTimeHelper::create('2018-01-29'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-01-29'),
             ],
             [// range between date and expectedDate has weekends and one holiday
-                'date' => DateTimeHelper::create('2018-02-26'),
+                'date' => $this->dateTimeHelper->create('2018-02-26'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-02-22'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-02-22'),
             ],
             [// range between date and expectedDate has weekends and two holidays
-                'date' => DateTimeHelper::create('2018-03-12'),
+                'date' => $this->dateTimeHelper->create('2018-03-12'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-03-07'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-03-07'),
             ],
             [// saturday is workday and range between date and expectedDate has one weekend and two days off
-                'date' => DateTimeHelper::create('2018-05-03'),
+                'date' => $this->dateTimeHelper->create('2018-05-03'),
                 'workdays' => -1,
-                'expectedDate' => DateTimeHelper::create('2018-04-28'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-04-28'),
             ],
             [// saturday is workday and range between date and expectedDate has one weekend and two days off
-                'date' => DateTimeHelper::create('2018-05-04'),
+                'date' => $this->dateTimeHelper->create('2018-05-04'),
                 'workdays' => -2,
-                'expectedDate' => DateTimeHelper::create('2018-04-28'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-04-28'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and two days off
-                'date' => DateTimeHelper::create('2018-05-07'),
+                'date' => $this->dateTimeHelper->create('2018-05-07'),
                 'workdays' => -3,
-                'expectedDate' => DateTimeHelper::create('2018-04-28'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-04-28'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and two days off
-                'date' => DateTimeHelper::create('2018-05-08'),
+                'date' => $this->dateTimeHelper->create('2018-05-08'),
                 'workdays' => -4,
-                'expectedDate' => DateTimeHelper::create('2018-04-28'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-04-28'),
             ],
             [// saturday is workday and range between date and expectedDate has three weekends and three days off
-                'date' => DateTimeHelper::create('2018-05-10'),
+                'date' => $this->dateTimeHelper->create('2018-05-10'),
                 'workdays' => -5,
-                'expectedDate' => DateTimeHelper::create('2018-04-28'),
+                'expectedDate' => $this->dateTimeHelper->create('2018-04-28'),
             ],
         ];
     }
@@ -432,11 +438,11 @@ class WorkdaysHelperTest extends TestCase
     {
         return [
             [
-                'date' => DateTimeHelper::create('2018-01-19'),
+                'date' => $this->dateTimeHelper->create('2018-01-19'),
                 'isWeekend' => false,
             ],
             [
-                'date' => DateTimeHelper::create('2018-01-20'),
+                'date' => $this->dateTimeHelper->create('2018-01-20'),
                 'isWeekend' => true,
             ],
         ];

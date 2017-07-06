@@ -1,9 +1,9 @@
 {
   "name":        "yapro/helpers",
   "description": "Functions that does not exist in native PHP",
-  "version":     "0.0.1",
+  "version":     "0.0.2",
   "type":        "library",
-  "keywords":    ["php", "function", "library", "utils", "extensions"],
+  "keywords":    ["php", "function", "library", "helpers", "extensions"],
   "homepage":    "https://github.com/yapro/helpers",
   "license":     "MIT",
 
@@ -16,8 +16,7 @@
   ],
 
   "require": {
-    "symfony/validator": ">=2.6",
-    "doctrine/common": ">=2.0"
+    "php": ">=7.0"
   },
 
   "require-dev": {

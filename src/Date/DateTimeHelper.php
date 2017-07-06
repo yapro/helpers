@@ -2,8 +2,6 @@
 
 namespace YaPro\Helper\Date;
 
-use YaPro\Helper\Validation\ScalarValidator;
-
 class DateTimeHelper
 {
     /**
@@ -12,7 +10,7 @@ class DateTimeHelper
      * @return \DateTime
      * @throws \UnexpectedValueException
      */
-    public static function create($date, \DateTimeZone $timezone = NULL): \DateTime
+    public function create($date, \DateTimeZone $timezone = NULL): \DateTime
     {
         $dateTime = new \DateTime($date, $timezone);
         $result = \DateTime::getLastErrors();
@@ -28,7 +26,7 @@ class DateTimeHelper
      * @return \DateTimeImmutable
      * @throws \UnexpectedValueException
      */
-    public static function createImmutable($date, \DateTimeZone $timezone = NULL): \DateTimeImmutable
+    public function createImmutable($date, \DateTimeZone $timezone = NULL): \DateTimeImmutable
     {
         $dateTime = new \DateTimeImmutable($date, $timezone);
         $result = \DateTimeImmutable::getLastErrors();
@@ -43,7 +41,7 @@ class DateTimeHelper
      * @param \DateTime $to
      * @return array
      */
-    public static function getMonthlyIntervals(\DateTime $from, \DateTime $to): array
+    public function getMonthlyIntervals(\DateTime $from, \DateTime $to): array
     {
         $intervals = [];
         $from = clone $from;
@@ -68,7 +66,7 @@ class DateTimeHelper
      * @param \DateTime $endDate
      * @return \DateTime[]
      */
-    public static function getIntervalDays(\DateTime $startDate, \DateTime $endDate): array
+    public function getIntervalDays(\DateTime $startDate, \DateTime $endDate): array
     {
         $days = [];
         $startDate = clone $startDate;
@@ -83,11 +81,11 @@ class DateTimeHelper
      * @param array $dates
      * @return \DateTime[]
      */
-    public static function getDatesFromStringsArray(array $dates): array
+    public function getDatesFromStringsArray(array $dates): array
     {
         $result = [];
         foreach ($dates as $date) {
-            $result[] = self::create($date);
+            $result[] = $this->create($date);
         }
         return $result;
     }
@@ -102,6 +100,22 @@ class DateTimeHelper
         // between 2018-12-29 and 2018-12-29 diff = 0
         // between 2018-12-29 and 2018-12-30 diff = 1
         // between 2018-12-29 and 2018-12-31 diff = 2
-        return ScalarValidator::getInteger($date1->diff($date2)->format('%a'));
+        return filter_var($date1->diff($date2)->format('%a'), FILTER_VALIDATE_INT);
+    }
+
+    /**
+     * function can check is are a date in the dates range
+     * @param string $date
+     * @param string $minDate
+     * @param string $maxDate
+     * @return \DateTimeImmutable|null
+     */
+    public function getDateInTheDatesRange(string $date, string $minDate, string $maxDate)
+    {
+        $dateTime = $this->createImmutable($date);
+        if ($this->createImmutable($minDate) <= $dateTime && $dateTime >= $this->createImmutable($maxDate)) {
+            return $dateTime;
+        }
+        return null;
     }
 }

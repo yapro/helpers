@@ -70,15 +70,6 @@ class WorkdaysHelper
 
     /**
      * @param \DateTime $date
-     * @return bool
-     */
-    private function isWeekend(\DateTime $date): bool
-    {
-        return in_array($date->format('N'), $this->weekend, true);
-    }
-
-    /**
-     * @param \DateTime $date
      * @param int $workdays
      * @return \DateTime
      */
@@ -97,5 +88,14 @@ class WorkdaysHelper
         }
 
         return $date;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    private function isWeekend(\DateTime $date): bool
+    {
+        return in_array($date->format('N'), $this->weekend, true);
     }
 }
