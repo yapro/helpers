@@ -1,7 +1,6 @@
 {
   "name":        "yapro/helpers",
   "description": "Functions that does not exist in native PHP",
-  "version":     "0.0.2",
   "type":        "library",
   "keywords":    ["php", "function", "library", "helpers", "extensions"],
   "homepage":    "https://github.com/yapro/helpers",
