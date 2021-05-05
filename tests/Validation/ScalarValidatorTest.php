@@ -47,10 +47,10 @@ class ScalarValidatorTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TypeError
      */
     public function getArrayWithIntegerValuesException()
     {
+        $this->expectException(\TypeError::class);
         $this->scalarValidator->getArrayWithIntegerValues([
             1.2,
         ]);
@@ -70,9 +70,19 @@ class ScalarValidatorTest extends TestCase
                 'allowedCharacters' => [],
             ],
             [
+                'expected' => 1,
+                'value' => '01',
+                'allowedCharacters' => [],
+            ],
+            [
                 'expected' => 0,
                 'value' => 'false',
                 'allowedCharacters' => ['false', 'f', '', null],// example: result from db
+            ],
+            [
+                'expected' => 1234,
+                'value' => '+01234',
+                [],
             ],
         ];
     }
@@ -89,7 +99,6 @@ class ScalarValidatorTest extends TestCase
         $this->assertSame($expected, $this->scalarValidator->getInteger($value, $allowedCharacters));
     }
 
-
     public function getIntegerExceptionProvider()
     {
         return [
@@ -102,11 +111,11 @@ class ScalarValidatorTest extends TestCase
                 'allowedCharacters' => [],
             ],
             [
-                'value' => '01',
+                'value' => [],
                 'allowedCharacters' => [],
             ],
             [
-                'value' => [],
+                'value' => [[0]],
                 'allowedCharacters' => [],
             ],
             [
@@ -117,18 +126,26 @@ class ScalarValidatorTest extends TestCase
                 'value' => 'a',
                 'allowedCharacters' => ['b'],
             ],
+            [
+                'value' => '+-01234',
+                'allowedCharacters' => [],
+            ],
+            [
+                'value' => '123foo',
+                'allowedCharacters' => [],
+            ],
         ];
     }
 
     /**
      * @test
      * @dataProvider getIntegerExceptionProvider
-     * @expectedException \TypeError
      * @param $value
      * @param array $allowedCharacters
      */
     public function getIntegerException($value, array $allowedCharacters)
     {
+        $this->expectException(\TypeError::class);
         $this->scalarValidator->getInteger($value, $allowedCharacters);
     }
 
@@ -136,16 +153,21 @@ class ScalarValidatorTest extends TestCase
     {
         return [
             [
-                'expected' => 1,
                 'value' => 1,
+                'expected' => 1,
             ],
             [
-                'expected' => 1.2,
                 'value' => 1.2,
+                'expected' => 1.2,
             ],
             [
-                'expected' => 1.2,
                 'value' => '1.2',
+                'expected' => 1.2,
+            ],
+            [
+                'value' => 's',
+                'expected' => 0.0,
+                ['s'],
             ],
         ];
     }
@@ -153,12 +175,13 @@ class ScalarValidatorTest extends TestCase
     /**
      * @test
      * @dataProvider getFloatProvider
-     * @param float $expected
      * @param $value
+     * @param float $expected
+     * @param array|null $allowedCharacters
      */
-    public function getFloat(float $expected, $value)
+    public function getFloat($value, float $expected, array $allowedCharacters = [])
     {
-        $this->assertSame($expected, $this->scalarValidator->getFloat($value));
+        $this->assertSame($expected, $this->scalarValidator->getFloat($value, $allowedCharacters));
     }
 
     public function getFloatExceptionProvider()
@@ -188,11 +211,11 @@ class ScalarValidatorTest extends TestCase
     /**
      * @test
      * @dataProvider getFloatExceptionProvider
-     * @expectedException \TypeError
      * @param $value
      */
     public function getFloatException($value)
     {
+        $this->expectException(\TypeError::class);
         $this->scalarValidator->getFloat($value);
     }
 

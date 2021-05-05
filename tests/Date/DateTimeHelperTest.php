@@ -31,10 +31,10 @@ class DateTimeHelperTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     public function createException()
     {
+        $this->expectException(\UnexpectedValueException::class);
         $checkDate = '1999-04-31';
         $this->dateTimeHelper->create($checkDate);
     }
@@ -52,10 +52,10 @@ class DateTimeHelperTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     public function createImmutableException()
     {
+        $this->expectException(\UnexpectedValueException::class);
         $checkDate = '1999-04-31';
         $this->dateTimeHelper->createImmutable($checkDate);
     }
