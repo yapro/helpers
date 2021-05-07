@@ -4,13 +4,14 @@ namespace YaPro\Helper\Date;
 
 use PHPUnit\Framework\TestCase;
 use YaPro\Helper\FileHelper;
-use YaPro\Helper\TestHelper;
+use YaPro\Helper\LiberatorTrait;
 
 /**
  * @coversDefaultClass \YaPro\Helper\Date\WorkdaysHelper
  */
 class WorkdaysHelperTest extends TestCase
 {
+    use LiberatorTrait;
     /**
      * @var WorkdaysHelper
      */
@@ -456,6 +457,6 @@ class WorkdaysHelperTest extends TestCase
      */
     public function testIsWeekend(\DateTime $date, bool $isWeekend)
     {
-        $this->assertSame($isWeekend, TestHelper::callClassMethod($this->workdaysHelper, 'isWeekend', [$date]));
+        $this->assertSame($isWeekend, $this->callClassMethod($this->workdaysHelper, 'isWeekend', [$date]));
     }
 }

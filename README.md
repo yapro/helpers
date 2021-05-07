@@ -17,5 +17,5 @@ Dev
 ```sh
 docker build -t yapro/helpers:latest -f ./Dockerfile ./
 docker run -it --rm -v $(pwd):/app -w /app yapro/helpers:latest bash
-composer install --optimize-autoloader --no-scripts --no-interaction
+composer install -o
 ```
