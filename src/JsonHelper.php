@@ -3,8 +3,60 @@ declare(strict_types=1);
 
 namespace YaPro\Helper;
 
+use function addslashes;
+use function implode;
+use function is_numeric;
+use function is_string;
+
 class JsonHelper
 {
+    /**
+     * Стандартная php-функция формирует недостаточно правильный json (добавляя ключ [0] при обработке массива).
+     *
+     * @param $val
+     *
+     * @return int|string
+     */
+    public function jsonEncode($val)
+    {
+        if (is_string($val)) {
+            return '"' . addslashes($val) . '"';
+        }
+        if (is_numeric($val)) {
+            return $val;
+        }
+        if ($val === null) {
+            return 'null';
+        }
+        if ($val === true) {
+            return 'true';
+        }
+        if ($val === false) {
+            return 'false';
+        }
+
+        $assoc = false;
+        $i = 0;
+        foreach ($val as $k => $v) {
+            if ($k !== $i++) {
+                $assoc = true;
+                break;
+            }
+        }
+
+        $res = [];
+        foreach ($val as $k => $v) {
+            $v = $this->jsonEncode($v);
+            if (is_string($k)) {
+                $v = '"' . addslashes($k) . '"' . ':' . $v;
+            }
+            $res[] = $v;
+        }
+        $res = implode(',', $res);
+
+        return ($assoc) ? '{' . $res . '}' : '[' . $res . ']';
+    }
+
     /**
      * Wrapper for JSON decode that implements error detection with helpful
      * error messages.
