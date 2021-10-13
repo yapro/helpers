@@ -1,5 +1,7 @@
 <?php
 
+namespace YaPro\Helper;
+
 class XmlFormatter
 {
     /**
