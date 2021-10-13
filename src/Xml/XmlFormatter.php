@@ -1,6 +1,6 @@
 <?php
 
-namespace YaPro\Helper;
+namespace YaPro\Helper\Xml;
 
 class XmlFormatter
 {
