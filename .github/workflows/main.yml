@@ -1,0 +1,26 @@
+name: phpunit tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "Checkout on commit in the repository"
+      uses: actions/checkout@v2
+    - name: "Build the Docker image"
+      run: docker build -t image:latest -f ./Dockerfile ./
+    # run command in virtual machine
+    - run: id
+    - run: pwd
+    # run commands in docker:
+    - run: docker run --rm --user=$(id -u):$(id -g) -v $(pwd):/app -w /app image:latest ls -la /tmp/composer-home
+    - run: docker run --rm --user=$(id -u):$(id -g) -v $(pwd):/app -w /app image:latest composer install --optimize-autoloader --no-scripts --no-interaction
+    - run: docker run --rm --user=$(id -u):$(id -g) -v $(pwd):/app -w /app image:latest /app/vendor/bin/phpunit /app/tests --stderr --stop-on-incomplete --stop-on-failure --stop-on-warning --fail-on-warning --stop-on-risky --fail-on-risky -v

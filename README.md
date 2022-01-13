@@ -3,6 +3,8 @@ Helpers
 
 Classes for solving the most common problems + functions that does not exist in native PHP.
 
+![lib tests](https://github.com/yapro/helpers/actions/workflows/main.yml/badge.svg)
+
 Tests
 ------------
 ```sh

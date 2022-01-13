@@ -62,17 +62,14 @@ class ScalarValidatorTest extends TestCase
             [
                 'expected' => 1,
                 'value' => 1,
-                'allowedCharacters' => [],
             ],
             [
                 'expected' => 1,
                 'value' => '1',
-                'allowedCharacters' => [],
             ],
             [
                 'expected' => 1,
                 'value' => '01',
-                'allowedCharacters' => [],
             ],
             [
                 'expected' => 0,
@@ -82,7 +79,10 @@ class ScalarValidatorTest extends TestCase
             [
                 'expected' => 1234,
                 'value' => '+01234',
-                [],
+            ],
+            [
+                'expected' => 10,
+                'value' => '10',
             ],
         ];
     }
@@ -94,7 +94,7 @@ class ScalarValidatorTest extends TestCase
      * @param $value
      * @param array $allowedCharacters
      */
-    public function getInteger(int $expected, $value, array $allowedCharacters)
+    public function getInteger(int $expected, $value, array $allowedCharacters = [])
     {
         $this->assertSame($expected, $this->scalarValidator->getInteger($value, $allowedCharacters));
     }
@@ -104,23 +104,18 @@ class ScalarValidatorTest extends TestCase
         return [
             [
                 'value' => null,
-                'allowedCharacters' => [],
             ],
             [
                 'value' => 1.2,
-                'allowedCharacters' => [],
             ],
             [
                 'value' => [],
-                'allowedCharacters' => [],
             ],
             [
                 'value' => [[0]],
-                'allowedCharacters' => [],
             ],
             [
                 'value' => new \StdClass(),
-                'allowedCharacters' => [],
             ],
             [
                 'value' => 'a',
@@ -128,11 +123,9 @@ class ScalarValidatorTest extends TestCase
             ],
             [
                 'value' => '+-01234',
-                'allowedCharacters' => [],
             ],
             [
                 'value' => '123foo',
-                'allowedCharacters' => [],
             ],
         ];
     }
@@ -143,7 +136,7 @@ class ScalarValidatorTest extends TestCase
      * @param $value
      * @param array $allowedCharacters
      */
-    public function getIntegerException($value, array $allowedCharacters)
+    public function getIntegerException($value, array $allowedCharacters = [])
     {
         $this->expectException(\TypeError::class);
         $this->scalarValidator->getInteger($value, $allowedCharacters);
@@ -167,7 +160,7 @@ class ScalarValidatorTest extends TestCase
             [
                 'value' => 's',
                 'expected' => 0.0,
-                ['s'],
+                'allowedCharacters' => ['s'],
             ],
         ];
     }
@@ -243,5 +236,40 @@ class ScalarValidatorTest extends TestCase
     function isPatternValid(bool $expected, $pattern)
     {
         $this->assertSame($expected, $this->scalarValidator->isPatternValid($pattern));
+    }
+    
+    public function correctBooleanArgumentsProvider(): array
+    {
+        return [
+            ['true', true],
+            [false, false],
+        ];
+    }
+
+    /**
+     * @dataProvider correctBooleanArgumentsProvider
+     */
+    public function testGetBooleanMethodPositive($value, bool $expectedResult): void
+    {
+        $result = $this->scalarValidator->getBoolean($value);
+        $this->assertIsBool($result);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function incorrectBooleanArgumentsProvider(): array
+    {
+        return [
+            [123],
+            ['abc'],
+        ];
+    }
+
+    /**
+     * @dataProvider incorrectBooleanArgumentsProvider
+     */
+    public function testGetBooleanMethodNegative($value): void
+    {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->scalarValidator->getBoolean($value);
     }
 }
