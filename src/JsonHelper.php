@@ -76,7 +76,7 @@ class JsonHelper
         $data = \json_decode($json, $assoc, $depth, $options);
         if (JSON_ERROR_NONE !== json_last_error()) {
             $message = json_last_error_msg();
-            throw new \InvalidArgumentException('json_decode error: ' . $message === false ? 'Unknown error' : $message);
+            throw new \InvalidArgumentException('json_decode error: ' . ($message === false ? 'Unknown error' : $message));
         }
         return $data;
     }
