@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace YaPro\Helper;
 
+use function ksort;
+
 class ArrayHelper
 {
     /**
@@ -52,5 +54,16 @@ class ArrayHelper
             }
         }
         return $difference;
+    }
+
+    public function multidimensionalSortByKeys(array $array): array
+    {
+        ksort($array);
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->multidimensionalSortByKeys($value);
+            }
+        }
+        return $array;
     }
 }
