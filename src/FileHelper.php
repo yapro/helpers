@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace YaPro\Helper;
 
-final class FileHelper
+class FileHelper
 {
     /**
      * @param string $fileName
