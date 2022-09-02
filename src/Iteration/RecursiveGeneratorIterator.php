@@ -13,16 +13,19 @@ class RecursiveGeneratorIterator implements \RecursiveIterator
         $this->generator = $generator;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->generator->current();
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->generator->next();
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->generator->key();
@@ -33,6 +36,7 @@ class RecursiveGeneratorIterator implements \RecursiveIterator
         return $this->generator->valid();
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->generator->rewind();
