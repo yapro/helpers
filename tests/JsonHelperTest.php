@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 use function json_encode;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class JsonHelperTest extends TestCase
 {
     public function testJsonEncode()
@@ -51,6 +54,7 @@ class JsonHelperTest extends TestCase
         $expected = '{"name":"Ken","my_object":{"boy":{"name":"str 1"}},"my_array":[{"name":"str 2"},{"name":"str 3"}]}';
         self::assertEquals($expected, (new JsonHelper())->jsonEncode($parameters));
         self::assertEquals($expected, json_encode($parameters));
+        self::assertEquals($expected, json_encode($parameters, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
         $parameters = [
             'key 1' => 'Ken',
@@ -61,5 +65,6 @@ class JsonHelperTest extends TestCase
         $expected = '{"key 1":"Ken","key-2":"Barbie (\"girl\")","key\\\3":"Todd\\\Cat","key\"4":"Stacie\nMouse"}';
         self::assertEquals($expected, (new JsonHelper())->jsonEncode($parameters));
         self::assertEquals($expected, json_encode($parameters));
+        self::assertEquals($expected, json_encode($parameters, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
 }
