@@ -7,6 +7,7 @@ use function addslashes;
 use function implode;
 use function is_numeric;
 use function is_string;
+use function str_replace;
 
 class JsonHelper
 {
@@ -20,7 +21,7 @@ class JsonHelper
     public function jsonEncode($val)
     {
         if (is_string($val)) {
-            return '"' . addslashes($val) . '"';
+            return '"' . str_replace('\\\n', '\n', addslashes(str_replace(PHP_EOL, '\n', $val))) . '"';
         }
         if (is_numeric($val)) {
             return $val;

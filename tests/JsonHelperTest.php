@@ -5,29 +5,61 @@ namespace YaPro\Helper;
 
 use PHPUnit\Framework\TestCase;
 
+use function json_encode;
+
 class JsonHelperTest extends TestCase
 {
     public function testJsonEncode()
     {
         $parameters = [
-            'name' => 'Ken',
-            'wife' => [
-                'name' => 'Barbie',
+            [
+                'name' => 'str 1',
             ],
-            'kids' => [
-                // boy (ключ использовать нельзя, иначе json_encode превратит array в object)
-                [
-                    'name' => 'Todd',
-                ],
-                // girl (ключ использовать нельзя, иначе json_encode превратит array в object)
-                [
-                    'name' => 'Stacie',
-                ],
+            'my_key' => [
+                'name' => 'str 2',
             ],
         ];
         self::assertEquals(
-            (new JsonHelper())->jsonEncode($parameters),
-            '{"name":"Ken","wife":{"name":"Barbie"},"kids":[{"name":"Todd"},{"name":"Stacie"}]}'
+            '{{"name":"str 1"},"my_key":{"name":"str 2"}}',
+            (new JsonHelper())->jsonEncode($parameters)
         );
+        self::assertEquals(
+            '{"0":{"name":"str 1"},"my_key":{"name":"str 2"}}',
+            json_encode($parameters)
+        );
+    }
+    public function testJsonEncodeTheSame()
+    {
+        $parameters = [
+            'name' => 'Ken',
+            'my_object' => [
+                // т.к. boy - ключ, jsonEncode превратит array в object
+                'boy' => [
+                    'name' => 'str 1',
+                ],
+            ],
+            'my_array' => [
+                // т.к. ключа нет, jsonEncode оставит array как есть
+                [
+                    'name' => 'str 2',
+                ],
+                [
+                    'name' => 'str 3',
+                ],
+            ],
+        ];
+        $expected = '{"name":"Ken","my_object":{"boy":{"name":"str 1"}},"my_array":[{"name":"str 2"},{"name":"str 3"}]}';
+        self::assertEquals($expected, (new JsonHelper())->jsonEncode($parameters));
+        self::assertEquals($expected, json_encode($parameters));
+
+        $parameters = [
+            'key 1' => 'Ken',
+            'key-2' => 'Barbie ("girl")',
+            'key\3' => 'Todd\Cat',
+            'key"4' => 'Stacie' . PHP_EOL . 'Mouse',
+        ];
+        $expected = '{"key 1":"Ken","key-2":"Barbie (\"girl\")","key\\\3":"Todd\\\Cat","key\"4":"Stacie\nMouse"}';
+        self::assertEquals($expected, (new JsonHelper())->jsonEncode($parameters));
+        self::assertEquals($expected, json_encode($parameters));
     }
 }
