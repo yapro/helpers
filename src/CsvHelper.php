@@ -19,7 +19,28 @@ final class CsvHelper
 
         return $rows;
     }
-    
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    public function formatToString(array $data): string
+    {
+        $stream = fopen('php://memory', 'wb');
+
+        try {
+            foreach ($data as $row) {
+                fputcsv($stream, $row);
+            }
+
+            rewind($stream);
+
+            return stream_get_contents($stream);
+        } finally {
+            fclose($stream);
+        }
+    }
+
     /**
      * @param string $fileName Имя файла
      * @return array
