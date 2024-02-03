@@ -67,4 +67,20 @@ class JsonHelperTest extends TestCase
         self::assertEquals($expected, json_encode($parameters));
         self::assertEquals($expected, json_encode($parameters, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
+
+
+    public function testSimpleModels(): void
+    {
+        $types = [
+            [
+                'varString' => 'string',
+                'varInteger' => 123,
+                'varBoolean' => true,
+                'varFloat' => 0.0,
+                'varNull' => null,
+            ],
+        ];
+        $expected = '[{"varString":"string","varInteger":123,"varBoolean":true,"varFloat":0.0,"varNull":null}]';
+        $this->assertEquals($expected, (new JsonHelper())->jsonEncode($types));
+    }
 }

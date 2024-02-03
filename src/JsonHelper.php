@@ -5,6 +5,7 @@ namespace YaPro\Helper;
 
 use function addslashes;
 use function implode;
+use function is_float;
 use function is_numeric;
 use function is_string;
 use function str_replace;
@@ -22,6 +23,11 @@ class JsonHelper
     {
         if (is_string($val)) {
             return '"' . str_replace('\\\n', '\n', addslashes(str_replace(PHP_EOL, '\n', $val))) . '"';
+        }
+        if (is_float($val)) {
+            // чтобы не писать: PHP_MAJOR_VERSION === 8 ? '0.0' : '0';
+            // это подобно json_encode(0.0, JSON_PRESERVE_ZERO_FRACTION)
+            return $val === 0.0 ? number_format($val, 1) : $val;
         }
         if (is_numeric($val)) {
             return $val;
