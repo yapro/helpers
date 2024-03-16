@@ -1,9 +1,9 @@
 <?php
 
-namespace YaPro\Helper;
+namespace YaPro\Helper\Tests;
 
-use App\Service\ExportCsvPresenter;
 use PHPUnit\Framework\TestCase;
+use YaPro\Helper\CsvHelper;
 
 class CsvHelperTest extends TestCase
 {

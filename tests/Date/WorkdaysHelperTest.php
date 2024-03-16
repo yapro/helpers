@@ -1,8 +1,10 @@
 <?php
 
-namespace YaPro\Helper\Date;
+namespace YaPro\Helper\Tests\Date;
 
 use PHPUnit\Framework\TestCase;
+use YaPro\Helper\Date\DateTimeHelper;
+use YaPro\Helper\Date\WorkdaysHelper;
 use YaPro\Helper\FileHelper;
 use YaPro\Helper\LiberatorTrait;
 
@@ -42,17 +44,18 @@ class WorkdaysHelperTest extends TestCase
         parent::__construct($name, $data, $dataName);
         $this->dateTimeHelper = new DateTimeHelper();
         $fixturesFolder = realpath(__DIR__ . '/../../src/Date');
+        $fileHelper = new FileHelper();
         $this->holidays = $this->dateTimeHelper->getDatesFromStringsArray(
-            explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/holidays.txt'))
+            explode(PHP_EOL, $fileHelper->getFileContent($fixturesFolder . '/holidays.txt'))
         );
         $this->workdays = $this->dateTimeHelper->getDatesFromStringsArray(
-            explode(PHP_EOL, FileHelper::getFileContent($fixturesFolder . '/workdays.txt'))
+            explode(PHP_EOL, $fileHelper->getFileContent($fixturesFolder . '/workdays.txt'))
         );
         $this->workdaysHelper = new WorkdaysHelper($this->holidays, $this->workdays);
         $this->testDate = $this->dateTimeHelper->create('03.09.2016');
     }
 
-    public function isWorkDayProvider()
+    public function isWorkDayProvider(): array
     {
         $tests = [];
         foreach ($this->holidays as $holiday) {

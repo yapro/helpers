@@ -15,7 +15,8 @@
   ],
 
   "require": {
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "ext-mbstring": "*"
   },
 
   "require-dev": {
@@ -26,6 +27,11 @@
   "autoload": {
     "psr-4": {
         "YaPro\\Helper\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "YaPro\\Helper\\Tests\\": "tests/"
     }
   },
 

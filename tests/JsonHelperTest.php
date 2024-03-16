@@ -1,10 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace YaPro\Helper;
+namespace YaPro\Helper\Tests;
 
 use PHPUnit\Framework\TestCase;
 
+use YaPro\Helper\JsonHelper;
 use function json_encode;
 
 use const JSON_UNESCAPED_SLASHES;

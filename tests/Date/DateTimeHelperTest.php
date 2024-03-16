@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace YaPro\Helper\Date;
+namespace YaPro\Helper\Tests\Date;
 
 use PHPUnit\Framework\TestCase;
+use YaPro\Helper\Date\DateTimeHelper;
 
 class DateTimeHelperTest extends TestCase
 {
@@ -171,7 +172,7 @@ class DateTimeHelperTest extends TestCase
      * @param string $minDate
      * @param string $maxDate
      */
-    public function getDateInTheDatesRange($expected = null, string $date, string $minDate, string $maxDate)
+    public function getDateInTheDatesRange($expected, string $date, string $minDate, string $maxDate)
     {
         $this->assertEquals($expected, $this->dateTimeHelper->getDateInTheDatesRange($date, $minDate, $maxDate));
     }

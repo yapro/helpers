@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace YaPro\Helper;
+namespace YaPro\Helper\Tests;
 
 use PHPUnit\Framework\TestCase;
+use YaPro\Helper\ArrayHelper;
 
 class ArrayHelperTest extends TestCase
 {

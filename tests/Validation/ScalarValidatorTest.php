@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace YaPro\Helper\Validation;
+namespace YaPro\Helper\Tests\Validation;
 
 use PHPUnit\Framework\TestCase;
+use YaPro\Helper\Validation\ScalarValidator;
 
 class ScalarValidatorTest extends TestCase
 {
@@ -231,9 +232,9 @@ class ScalarValidatorTest extends TestCase
      * @dataProvider isPatternValidProvider
      * @param bool $expected
      * @param string $pattern
-     * @return bool
+     * @return void
      */
-    function isPatternValid(bool $expected, $pattern)
+    function isPatternValid(bool $expected, $pattern): void
     {
         $this->assertSame($expected, $this->scalarValidator->isPatternValid($pattern));
     }
