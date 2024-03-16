@@ -19,7 +19,7 @@ trait LiberatorTrait
      *
      * @return mixed
      */
-    private function callClassMethod($object, $method, array $args = [])
+    public function callClassMethod($object, $method, array $args = [])
     {
         $class = new ReflectionClass($object);
         $method = $class->getMethod($method);
@@ -33,7 +33,7 @@ trait LiberatorTrait
      * @param string        $propertyName
      * @param mixed         $value
      */
-    private function setClassPropertyValue($object, $propertyName, $value)
+    public function setClassPropertyValue($object, $propertyName, $value)
     {
         $class = new ReflectionClass($object);
 
@@ -52,7 +52,7 @@ trait LiberatorTrait
      *
      * @return mixed
      */
-    private function getClassPropertyValue($object, $propertyName)
+    public function getClassPropertyValue($object, $propertyName)
     {
         $class = new ReflectionClass($object);
         $property = $class->getProperty($propertyName);
