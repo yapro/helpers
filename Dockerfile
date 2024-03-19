@@ -17,4 +17,8 @@ RUN docker-php-ext-configure zip \
 RUN curl https://getcomposer.org/download/2.0.12/composer.phar --output /usr/bin/composer && \
     chmod +x /usr/bin/composer
 
+# Install xdebug extension
+RUN case "$PHP_VERSION" in ( "8"* ) pecl install xdebug;; ( * ) pecl install  xdebug-3.1.5;; esac && \
+    docker-php-ext-enable xdebug
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
