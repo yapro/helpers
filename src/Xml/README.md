@@ -141,6 +141,7 @@ Example, we have the xml:
 Make SimpleXMLElement:
 ```php
 $simpleXml = simplexml_load_string($xml);
+print_r((array) $simpleXml);
 ```
 
 Get the attribute xmlns:xsi
