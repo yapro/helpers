@@ -141,7 +141,17 @@ Example, we have the xml:
 Make SimpleXMLElement:
 ```php
 $simpleXml = simplexml_load_string($xml);
-print_r((array) $simpleXml);
+print_r(json_decode(json_encode((array) $simpleXml)));
+```
+Приведя к массиву ым получаем привычную работу с данными, однако получается массив, в котором каждое значения это 
+SimpleXMLElement, а значит обратившись к нему как строке, получаем SimpleXMLElement, это неудобно. Поэтому, чтобы 
+сделать привычным нам способ работы с данными (как с массивом) мы конвертируем в json, и обратно в array|stdClass.
+
+Пример получения attribute QueryID:
+```php
+$this->skyScanner = json_decode(json_encode((array) $simpleXml), true);
+
+$urlParams['QueryID'] = $this->skyScanner['@attributes']['QueryID'];
 ```
 
 Get the attribute xmlns:xsi
@@ -152,11 +162,4 @@ $urlParams['xmlns:xsi'] = $simpleXml->getNamespaces()['xsi'];
 Get the attribute xsi:noNamespaceSchemaLocation
 ```php
 $urlParams['xsi:noNamespaceSchemaLocation'] = $simpleXml->attributes('xsi', true)->getNamespaces()['xsi'];
-```
-
-Get the attribute QueryID:
-```php
-$this->skyScanner = json_decode(json_encode((array) $simpleXml), true);
-
-$urlParams['QueryID'] = $this->skyScanner['@attributes']['QueryID'];
 ```
