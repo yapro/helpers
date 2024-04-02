@@ -52,6 +52,21 @@ class StringHelper
         $text = preg_replace('/[\-]{2,}/', '-', $text);
 
         return trim($text, '-');
+    }
 
+    public function getRandomPopularNounsAsString(int $count): string
+    {
+        return implode(', ', $this->getRandomPopularNouns($count));
+    }
+
+    public function getRandomPopularNouns(int $count): array
+    {
+        $nouns = explode(PHP_EOL, $this->getPopularNounsAsString());
+        return array_rand(array_flip($nouns), $count);
+    }
+
+    public function getPopularNounsAsString(): string
+    {
+        return (new FileHelper())->getFileContent(__DIR__ . '/String/PopularNouns.txt');
     }
 }
