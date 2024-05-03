@@ -1,10 +1,10 @@
 <?php
 
-namespace YaPro\Helper\Tests;
+namespace YaPro\Helper\Tests\String;
 
 use Generator;
 use PHPUnit\Framework\TestCase;
-use YaPro\Helper\StringHelper;
+use YaPro\Helper\String\StringHelper;
 
 class StringHelperTest extends TestCase
 {

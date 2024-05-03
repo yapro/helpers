@@ -45,7 +45,7 @@ final class CsvHelper
      * @param string $fileName Имя файла
      * @return array
      */
-    private function getCsvContent(string $fileName): array
+    public function getCsvContent(string $fileName): array
     {
         $rows = [];
         $file = new \SplFileObject($fileName, "r");
