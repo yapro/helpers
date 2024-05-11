@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace YaPro\Helper;
 
+use stdClass;
 use function addslashes;
 use function implode;
 use function is_float;
@@ -13,6 +14,13 @@ use function str_replace;
 class JsonHelper
 {
     /**
+     * Просто функция json_encode преднастроенная для удобной человеку работы с кирилицей.
+     */
+    public function encode($value): string
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR );
+    }
+    /**
      * Стандартная php-функция формирует недостаточно правильный json (добавляя ключ [0] при обработке массива).
      *
      * @param $val
@@ -22,7 +30,12 @@ class JsonHelper
     public function jsonEncode($val)
     {
         if (is_string($val)) {
-            return '"' . str_replace('\\\n', '\n', addslashes(str_replace(PHP_EOL, '\n', $val))) . '"';
+            return '"' .
+                str_replace("\t", '\t',
+                str_replace("\n", '\n',
+                str_replace("\r\n", '\r\n',
+                str_replace('"', '\"',
+                str_replace('\\', '\\\\', $val))))) . '"';
         }
         if (is_float($val)) {
             // чтобы не писать: PHP_MAJOR_VERSION === 8 ? '0.0' : '0';
@@ -42,11 +55,11 @@ class JsonHelper
             return 'false';
         }
 
-        $assoc = false;
+        $isObject = gettype($val) === 'object';
         $i = 0;
         foreach ($val as $k => $v) {
             if ($k !== $i++) {
-                $assoc = true;
+                $isObject = true;
                 break;
             }
         }
@@ -54,14 +67,14 @@ class JsonHelper
         $res = [];
         foreach ($val as $k => $v) {
             $v = $this->jsonEncode($v);
-            if (is_string($k)) {
-                $v = '"' . addslashes($k) . '"' . ':' . $v;
+            if ($isObject) {
+                $v = '"' . addslashes((string) $k) . '"' . ':' . $v;
             }
             $res[] = $v;
         }
         $res = implode(',', $res);
 
-        return ($assoc) ? '{' . $res . '}' : '[' . $res . ']';
+        return $isObject ? '{' . $res . '}' : '[' . $res . ']';
     }
 
     /**
