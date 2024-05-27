@@ -39,4 +39,24 @@ class StringHelper
         
         return trim($html);
     }
+
+    // Склонение существительных, например echo noun(7, 'яблоко', 'яблока', 'яблок');
+    function noun($num = 0, string $str1 = '', string $str2 = '', string $str5 = ''): string
+    {
+        $num = abs($num);
+        if ($num > 100) $num %= 100;
+        if ($num > 20) $num %= 10;
+        switch ($num) {
+            case 1:
+                return $str1;
+            case 2:
+                return $str2;
+            case 3:
+                return $str2;
+            case 4:
+                return $str2;
+            default:
+                return $str5;
+        }
+    }
 }
