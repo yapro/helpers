@@ -22,7 +22,7 @@ class StringHelper
     }
 
     // убирает отступы у строк слева, чтобы когда мы заменим PHP_EOL на '</p><p>', мы спокойно убрали лишние теги,
-    // например до функции было: '<p>  <li>', а после '<p>  <li>', которые мы можем заменить на <li>
+    // например до функции было: '<ul>  <li>', а после '<ul>\n<li>'
     public function getHtmlWithoutIndentions(string $html)
     {
         // делаем единообразные переносы строк (вдруг попадется текст написанный на Windows):
@@ -38,6 +38,25 @@ class StringHelper
         $html = implode(PHP_EOL, $paragraphs);
         
         return trim($html);
+    }
+
+    // Удаляет заголовок в HTML, если заголовок это первое, что есть в HTML
+    public function getHtmlWithoutFirstHeading(string $html)
+    {
+        $html = trim($html);
+        $tagName = mb_strtolower(mb_substr($html, 1, 2));
+        // если первый тег является тегом заголовка:
+        if (mb_substr($html, 0, 1) === '<' &&
+            mb_substr($html, 3, 1) === '>' &&
+            in_array($tagName, ['h1', 'h2', 'h3', 'h4', 'h5'], true)
+        ) {
+            // удаляем заголовок:
+            $parts = explode('</' . $tagName . '>', $html);
+            array_shift($parts);
+            $html = implode('</' . $tagName . '>', $parts);
+        }
+        
+        return $html;
     }
 
     // Склонение существительных, например echo noun(7, 'яблоко', 'яблока', 'яблок');
