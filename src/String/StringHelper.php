@@ -80,6 +80,12 @@ class StringHelper
     }
 
     // Преобразовывает первый символ строки в верхний регистр
+    public function noneWithNum($num = 0, string $str1 = '', string $str2 = '', string $str5 = ''): string
+    {
+        return $num . ' ' . $this->noun($num, $str1, $str2, $str5);
+    }
+
+    // Преобразовывает первый символ строки в верхний регистр
     public function ucfirst(string $string)
     {
         return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
