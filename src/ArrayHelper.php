@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace YaPro\Helper;
 
+use UnexpectedValueException;
 use function ksort;
 
 class ArrayHelper
@@ -65,5 +66,21 @@ class ArrayHelper
             }
         }
         return $array;
+    }
+
+    // пока что умеет работать только с десятком $items
+    public function getItemByStringEnd(string $string, array $items): string
+    {
+        $partsQuantity = count($items);
+        if ($partsQuantity === 1) {
+            return reset($items);
+        }
+        if ($partsQuantity !== 10) {
+            throw new UnexpectedValueException('The number of items must be 10');
+        }
+        // На 64-битных платформах все результаты crc32() будут положительными целыми.
+        $key = mb_substr((string) crc32($string), -1);
+
+        return $items[$key];
     }
 }
