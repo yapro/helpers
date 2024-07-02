@@ -6,6 +6,6 @@ namespace YaPro\Helper;
 /**
  * @deprecated use YaPro\Helper\Array\ArrayHelper
  */
-class ArrayHelper extends \YaPro\Helper\Array\ArrayHelper
+class ArrayHelper extends \YaPro\Helper\Arrays\ArrayHelper
 {
 }
