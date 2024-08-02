@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace YaPro\Helper\Arrays;
 
+use ArrayAccess;
 use Iterator;
 
-abstract class AbstractKeeper implements Iterator
+abstract class AbstractKeeper implements Iterator, ArrayAccess
 {
     protected array $all = [];
 
@@ -56,5 +57,25 @@ abstract class AbstractKeeper implements Iterator
     public function rewind(): mixed
     {
         return reset($this->all);
+    }
+
+    public function offsetSet($offset, $value): void {
+        if (is_null($offset)) {
+            $this->all[] = $value;
+        } else {
+            $this->all[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset): bool {
+        return isset($this->all[$offset]);
+    }
+
+    public function offsetUnset($offset): void {
+        unset($this->all[$offset]);
+    }
+
+    public function offsetGet($offset): mixed {
+        return isset($this->all[$offset]) ? $this->all[$offset] : null;
     }
 }
