@@ -17,6 +17,11 @@ abstract class AbstractKeeper implements Iterator, ArrayAccess
         return count($this->all);
     }
 
+    public function getAll(): array
+    {
+        return $this->all;
+    }
+
     public function countBy($key): int
     {
         return isset($this->all[$key]) ? count($this->all[$key]) : 0;
