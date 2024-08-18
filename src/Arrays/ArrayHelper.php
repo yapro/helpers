@@ -83,4 +83,16 @@ class ArrayHelper
 
         return $items[$key];
     }
+
+    public function getItemsByStringEnd(string $string, array $itemsList): string
+    {
+        $result = [];
+        $keys = count($itemsList);
+        foreach ($itemsList as $item) {
+            $result[] = $this->getItemByStringEnd($string, $item);
+            $string = mb_substr($string, 0, -1);
+        }
+        
+        return implode(' ', $result);
+    }
 }
