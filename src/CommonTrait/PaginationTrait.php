@@ -17,7 +17,7 @@ trait PaginationTrait
         $this->currentPageNumber = $page > self::FIRST_PAGE_NUMBER ? $page : self::FIRST_PAGE_NUMBER;
 
         // client может сам указать кол-во возвращаемых строк, но не более 100
-        $itemsPerPage = $itemsPerPage < 100 ? $itemsPerPage : 100;
+        // не везде это нужно, поэтому комментирую: $itemsPerPage = $itemsPerPage < 100 ? $itemsPerPage : 100;
 
         $this->offset = ($this->currentPageNumber - 1) * $itemsPerPage;
         $this->limit = $itemsPerPage;
