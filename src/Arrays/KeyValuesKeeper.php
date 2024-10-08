@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace YaPro\Helper\Arrays;
 
-class KeyValueKeeper extends AbstractKeeper
+class KeyValuesKeeper extends AbstractKeeper
 {
     public function add($key, $value = null): void
     {
