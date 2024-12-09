@@ -40,11 +40,19 @@ class EmailValidatorTest extends TestCase
         ];
         yield [
             'string' => 'Вот мой@email.com в тексте',
-            'expected' => false, // слева не может быть ру символов
+            'expected' => false, // слева не могут быть ру символы
         ];
         yield [
             'string' => 'Вот my@емэйл.com в тексте',
-            'expected' => false, // справа не может быть ру символов
+            'expected' => true, // справа могут быть ру символы
+        ];
+        yield [
+            'string' => 'Вот my@емэйл.рф в тексте',
+            'expected' => true, // справа могут быть ру символы даже в основной зоне
+        ];
+        yield [
+            'string' => 'Вот мой@емэйл.рф в тексте',
+            'expected' => false, // но слева все еще не могут быть ру символы
         ];
     }
 
