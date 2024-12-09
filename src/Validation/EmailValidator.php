@@ -9,6 +9,13 @@ namespace YaPro\Helper\Validation;
  */
 class EmailValidator
 {
+    public const PATTERN = '(([^а-яА-Я<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([а-яА-Яa-zA-Z\-0-9]+\.)+[а-яА-Яa-zA-Z]{2,}))';
+
+    public function isContainsEmail(string $string): bool
+    {
+        return preg_match('/' . self::PATTERN . '/su', $string) === 1;
+    }
+
     /**
      * Валидация.
      *
@@ -29,9 +36,7 @@ class EmailValidator
             return false;
         }
 
-        // phpcs:ignore
-        $q = "/^(([^а-яА-Я<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([а-яА-Яa-zA-Z\-0-9]+\.)+[а-яА-Яa-zA-Z]{2,}))$/";
-        if (preg_match($q, $email) === 1) {
+        if (preg_match('/^' . self::PATTERN . '$/', $email) === 1) {
             return true;
         }
 
