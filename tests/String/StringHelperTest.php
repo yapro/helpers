@@ -70,4 +70,52 @@ class StringHelperTest extends TestCase
         $actual = $object->getHtmlWithoutFirstHeading($html);
         $this->assertSame($expected, $actual);
     }
+
+    public function isMatchProvider(): Generator
+    {
+        yield [
+            'needle' => 'любое место',
+            'haystack' => 'а любое место в тексте',
+            'expected' => false, // чтобы нашло, должны быть звездочки по бокам
+        ];
+        yield [
+            'needle' => '*середина*',
+            'haystack' => 'а середина становится ',
+            'expected' => true,
+        ];
+        yield [
+            'needle' => '*Слева справа*',
+            'haystack' => 'Слева середина: справа',
+            'expected' => false, // нет * между словами, поэтому false
+        ];
+        yield [
+            'needle' => '*Слева*справа*',
+            'haystack' => 'Слева середина: справа',
+            'expected' => true,
+        ];
+        yield [
+            'needle' => 'Слева*справа*',
+            'haystack' => 'Слева середина: справа',
+            'expected' => true,
+        ];
+        yield [
+            'needle' => 'Слева*справа',
+            'haystack' => 'Слева середина: справа',
+            'expected' => true,
+        ];
+        yield [
+            'needle' => 'середина*справа',
+            'haystack' => 'Слева середина: справа',
+            'expected' => false,
+        ];
+    }
+
+    /**
+     * @dataProvider isMatchProvider
+     */
+    public function test_isMatch(string $needle, string $haystack, bool $expected): void
+    {
+        $result = (new StringHelper())->isMatch($needle, $haystack);
+        $this->assertEquals($expected, $result);
+    }
 }

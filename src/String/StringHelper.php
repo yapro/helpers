@@ -96,4 +96,9 @@ class StringHelper
     {
         return mb_strtolower(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
+
+    public function isMatch(string $needle, string $html): bool
+    {
+        return (bool) preg_match('/^'.str_replace('*', '(.*)', $needle).'$/sui', $html);
+    }
 }
