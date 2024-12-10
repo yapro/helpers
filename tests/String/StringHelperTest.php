@@ -108,6 +108,26 @@ class StringHelperTest extends TestCase
             'haystack' => 'Слева середина: справа',
             'expected' => false,
         ];
+        yield [ // проверяем на правильное эскепирование:
+            'needle' => '*[Имя ABC](https://example.ru)*',
+            'haystack' => '[Имя ABC](https://example.ru)',
+            'expected' => true,
+        ];
+        yield [ // как выше, но строка в тексте:
+            'needle' => '*[Имя ABC](https://example.ru)*',
+            'haystack' => 'Вот [Имя ABC](https://example.ru) в тексте',
+            'expected' => true,
+        ];
+        yield [ // проверяем на правильное эскепирование:
+            'needle' => '*доступна по [ссылке](#)*',
+            'haystack' => 'доступна по [ссылке](#)',
+            'expected' => true,
+        ];
+        yield [ // как выше, но строка в тексте:
+            'needle' => '*доступна по [ссылке](#)*',
+            'haystack' => 'Вот доступна по [ссылке](#) в тексте',
+            'expected' => true,
+        ];
     }
 
     /**
