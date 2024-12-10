@@ -99,6 +99,7 @@ class StringHelper
 
     public function isMatch(string $needle, string $html): bool
     {
-        return (bool) preg_match('/^'.str_replace('*', '(.*)', $needle).'$/sui', $html);
+        $pattern = '/^' . str_replace('*', '(.*)', str_replace('/', '\/', $needle)) . '$/sui';
+        return preg_match($pattern, $html) === 1;
     }
 }
