@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace YaPro\Helper\Arrays;
 
+use ArrayIterator;
+use InfiniteIterator;
 use UnexpectedValueException;
 use function ksort;
 
@@ -94,5 +96,20 @@ class ArrayHelper
         }
         
         return implode(' ', $result);
+    }
+
+    // Makes ten variant from any submited ones
+    public function makeTen(array $items): array
+    {
+        $result = [];
+        $iterator = new InfiniteIterator(new ArrayIterator($items));
+        foreach ($iterator as $item) {
+            $result[] = $item;
+            if (count($result) === 10) {
+                return $result;
+            }
+        }
+
+        return $result;
     }
 }
