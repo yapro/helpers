@@ -14,7 +14,7 @@ class StringHelper
         $withoutInvisible = preg_replace('/['.$remove.']/u', ' ', $string);
         $withoutDoubleBlanks = preg_replace('/[\s]{2,}/', ' ', $withoutInvisible);
 
-        return trim($withoutDoubleBlanks);
+        return $withoutDoubleBlanks;
     }
 
     public function getRandomPopularNounsAsString(int $count, string $delimeter = ', '): string
@@ -113,5 +113,14 @@ class StringHelper
     {
         $pattern = '/^' . str_replace('\*', '(.*)', preg_quote($needle, '/')) . '$/sui';
         return preg_match($pattern, $html) === 1;
+    }
+
+    public function cleanup(string $string): string
+    {
+        if ($result = preg_replace('/[^\p{Cyrillic}\p{Common}\p{Latin}]+/u', '', $string)) {
+            return $this->getWithoutInvisibleSymbols($result);
+        }
+
+        return $this->getWithoutInvisibleSymbols($string);
     }
 }

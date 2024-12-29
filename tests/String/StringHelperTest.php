@@ -138,4 +138,37 @@ class StringHelperTest extends TestCase
         $result = (new StringHelper())->isMatch($needle, $haystack);
         $this->assertEquals($expected, $result);
     }
+    
+    public function cleanupProvider(): Generator
+    {
+        yield [
+            'input' => 'представлены в РФ: Avatr, Deepal, eπ. На выход',
+            'output' => 'представлены в РФ: Avatr, Deepal, e. На выход',
+        ];
+        yield [
+            'input' => '<p>В 2022 году ключева́я ставка',
+            'output' => '<p>В 2022 году ключевая ставка',
+        ];
+        yield [
+            'input' => '«Ипотека 0,01% … зафиксировала, что спірна́я информация',
+            'output' => '«Ипотека 0,01% … зафиксировала, что спірная информация',
+        ];
+        yield [
+            'input' => 'В итоге收益 за весь',
+            'output' => 'В итоге за весь',
+        ];
+        yield [
+            'input' => '<p>🟢 поддерживается',
+            'output' => '<p>🟢 поддерживается',
+        ];
+    }
+    
+    /**
+     * @dataProvider cleanupProvider
+     */
+    public function test_cleanup(string $input, string $expected): void
+    {
+        $result = (new StringHelper())->cleanup($input);
+        $this->assertEquals($expected, $result);
+    }
 }
