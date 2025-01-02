@@ -98,8 +98,14 @@ class ArrayHelper
         return implode(' ', $result);
     }
 
-    // Example: getIntegerTail($userId, count($users)) or getIntegerTail($name, count($messages))
-    public function getIntegerTail(int|string $value, int $quantity): int
+    /**
+     * Example: getIntegerTail($userId, count($users)) or getIntegerTail($name, count($messages))
+     * 
+     * @param int|string $value
+     * @param int $quantity
+     * @return int
+     */
+    public function getIntegerTail($value, int $quantity): int
     {
         if (is_numeric($value)) {
             $value = (string) $value;
@@ -108,10 +114,16 @@ class ArrayHelper
         return (int) mb_substr((string) crc32((string) $value), -mb_strlen((string) $quantity));
     }
 
-    // Example:
-    // $userIdentity = $this->getIntegerTail($userName, count($users));
-    // $permanentUserChoise = $this->getIteration($userIdentity, $cars);
-    public function getIteration(int $necessaryIteration, array $items): mixed
+    /**
+     * Example:
+     * $userIdentity = $this->getIntegerTail($userName, count($users));
+     * $permanentUserChoise = $this->getIteration($userIdentity, $cars);
+     * 
+     * @param int $necessaryIteration
+     * @param array $items
+     * @return mixed
+     */
+    public function getIteration(int $necessaryIteration, array $items)
     {
         $iterator = new InfiniteIterator(new ArrayIterator($items));
         $iterationNumber = 0;
