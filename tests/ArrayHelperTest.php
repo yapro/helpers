@@ -70,4 +70,15 @@ class ArrayHelperTest extends TestCase
         ];
         $this->assertEquals($expected, $this->arrayHelper->multidimensionalSortByKeys($array));
     }
+
+    public function test_getIntegerTail()
+    {
+        $this->assertEquals(496, $this->arrayHelper->getIntegerTail('Bob', 123));
+        $this->assertEquals(522, $this->arrayHelper->getIntegerTail(123, 456));
+    }
+
+    public function test_getIteration()
+    {
+        $this->assertEquals('second', $this->arrayHelper->getIteration(4, ['first', 'second', 'third']));
+    }
 }

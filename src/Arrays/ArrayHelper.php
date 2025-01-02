@@ -98,18 +98,30 @@ class ArrayHelper
         return implode(' ', $result);
     }
 
-    // Makes ten variant from any submited ones
-    public function makeTen(array $items): array
+    // Example: getIntegerTail($userId, count($users)) or getIntegerTail($name, count($messages))
+    public function getIntegerTail(int|string $value, int $quantity): int
     {
-        $result = [];
+        if (is_numeric($value)) {
+            $value = (string) $value;
+        }
+        // На 64-битных платформах все результаты crc32() будут положительными целыми.
+        return (int) mb_substr((string) crc32((string) $value), -mb_strlen((string) $quantity));
+    }
+
+    // Example:
+    // $userIdentity = $this->getIntegerTail($userName, count($users));
+    // $permanentUserChoise = $this->getIteration($userIdentity, $cars);
+    public function getIteration(int $necessaryIteration, array $items): mixed
+    {
         $iterator = new InfiniteIterator(new ArrayIterator($items));
+        $iterationNumber = 0;
         foreach ($iterator as $item) {
-            $result[] = $item;
-            if (count($result) === 10) {
-                return $result;
+            if ($iterationNumber === $necessaryIteration) {
+                return $item;
             }
+            $iterationNumber++;
         }
 
-        return $result;
+        return null;
     }
 }
