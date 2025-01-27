@@ -81,4 +81,49 @@ class ArrayHelperTest extends TestCase
     {
         $this->assertEquals('second', $this->arrayHelper->getIteration(4, ['first', 'second', 'third']));
     }
+
+    public function test_fill()
+    {
+        $data = [];
+        $this->arrayHelper->fill($data, 'key1', 'key2', 'keyX', 'value1');
+        $this->arrayHelper->fill($data, 'key1', 'key2', 'keyX', 'value2');
+        $this->arrayHelper->fill($data, 'key1', 'key3', 'keyX', 'value3');
+        $expected = [
+            'key1' => [
+                'key2' => [
+                    'keyX' => 'value2'
+                ],
+                'key3' => [
+                    'keyX' => 'value3'
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $data);
+    }
+
+    public function test_push()
+    {
+        $data = [];
+        $this->arrayHelper->push($data, 'key1', 'key2', 'keyX', 'value1');
+        $this->arrayHelper->push($data, 'key1', 'key2', 'keyX', 'value2');
+        $this->arrayHelper->push($data, 'key1', 'key3', 'keyX', 'value3');
+        $this->arrayHelper->push($data, 'key1', 'key3', 'keyX', 'value4');
+        $expected = [
+            'key1' => [
+                'key2' => [
+                    'keyX' => [
+                        'value1',
+                        'value2',
+                    ]
+                ],
+                'key3' => [
+                    'keyX' => [
+                        'value3',
+                        'value4',
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $data);
+    }
 }

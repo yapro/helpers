@@ -136,4 +136,46 @@ class ArrayHelper
 
         return null;
     }
+
+    public function fill(array &$array)
+    {
+        $argList = func_get_args();
+        array_shift($argList); // &$array removing
+        $this->arrayMagic('set', $array, ...$argList);
+    }
+
+    public function push(array &$array)
+    {
+        $argList = func_get_args();
+        array_shift($argList); // &$array removing
+        $this->arrayMagic('push', $array, ...$argList);
+    }
+
+    public function arrayMagic(string $mode, array &$array)
+    {
+        $argList = func_get_args();
+        array_shift($argList); // $mode removing
+        array_shift($argList); // &$array removing
+        if (empty($argList)) {
+            return;
+        }
+        $value = array_pop($argList);
+
+        $current = &$array;
+        foreach ($argList as $key) {
+            // &$current[$key] не возвращает значение, а создает ключ и возвращает ссылку на значение null, при этом, 
+            // т.к. обращение идет к null по ключу, то PHP создает массив с ключем (магия), а если значение есть, то
+            // возвращается ссылка на это значение (тонкая магия, может поломается в одной из следующих версий PHP) 
+            $current = &$current[$key];
+        }
+        if ($mode === 'push') {
+            if (is_null($current) || is_array($current)) {
+                $current[] = $value;
+                return;
+            }
+            // Происходит попытка добавить значение в массив, в котором $current ссылается например на строку:
+            throw new UnexpectedValueException('Auto-conversion to an array is not supported');
+        }
+        $current = $value;
+    }
 }
