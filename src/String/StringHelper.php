@@ -124,7 +124,7 @@ class StringHelper
         return $this->getWithoutInvisibleSymbols($string);
     }
 
-    public function getCleanedTextWhereEachSentenceAsNewLine(null|string $string): string
+    public function getCleanedTextWhereEachSentenceAsNewLine(?string $string): string
     {
         if (!is_string($string)) {
             return '';
