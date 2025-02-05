@@ -123,4 +123,94 @@ class StringHelper
 
         return $this->getWithoutInvisibleSymbols($string);
     }
+
+    public function getCleanedTextWhereEachSentenceAsNewLine(null|string $string): string
+    {
+        if (!is_string($string)) {
+            return '';
+        }
+        // преобразовываем мнемоники вида &nbsp; в юникод-символы вида  , а затем заменяем данные юникод-символы на пробел:
+        $string = trim($this->cleanup(html_entity_decode($string)));
+        $tags = ['<br>', '<br/>', '<br />', '</li>', '</p>', '</div>', '</th>', '</td>', '</blockquote>', '</section>', '</article>', '</header>', '</footer>', '</aside>', '</main>', '</nav>', '</h1>', '</h2>', '</h3>', '</h4>', '</h5>', '</h6>', '</pre>', '</hr>', '</address>', '</figure>', '</figcaption>'];
+        // не регуляркой, т.к. больше уверенности + понятности + нестандартное закрые BR-тегов
+        foreach ($tags as $tag) {
+            $string = str_replace($tag, $tag . PHP_EOL, $string);
+            $tag = mb_strtoupper($tag);
+            $string = str_replace($tag, $tag . PHP_EOL, $string);
+        }
+
+        // str_replace('><', '> <', подстраховка от ситуации, когда в результате strip_tags два слова сливаются в одно в
+        // результате изменения поведения HTML-тега с строчного вида, на блочный, например когда <span> становится блоком:
+        $string = trim(strip_tags(str_replace('><', '> <', $string)));
+        $sentences = explode(PHP_EOL, $string);
+        // подчищаем хвосты строк:
+        $result = [];
+        foreach ($sentences as $sentence) {
+            $trimmed = trim($sentence);
+            if (!empty($trimmed)) {
+                $result[] = $trimmed;
+            }
+        }
+
+        return implode(PHP_EOL, $result);
+    }
+
+    /**
+     * @param string $previousRows - текст 1
+     * @param string $currentRows - текст 2
+     * @return string - разница между текстом 1 и текстом 2 в виде HTML:
+     * в предыдущем тексте нет:
+     * 1) строка 1
+     * 2) строка 2
+     * 3) и т.д.
+     * в текущем тексте нет:
+     * 1) строка 1
+     * 2) строка 2
+     * 3) и т.д.
+     */
+    public function getTextRowsDiff(string $previousRows, string $currentRows): string
+    {
+        if (empty($previousRows) && empty($currentRows)) {
+            return 'previous пуст';
+        }
+        if (empty($currentRows)) {
+            return 'current пуст';
+        }
+        if (empty($previousRows)) {
+            return str_replace(PHP_EOL, '<br>', $currentRows);
+        }
+        $previousStrings = explode(PHP_EOL, $previousRows);
+        $currentStrings = explode(PHP_EOL, $currentRows);
+        $previousCurrentDiff = array_diff($previousStrings, $currentStrings);
+        $currentPreviousDiff = array_diff($currentStrings, $previousStrings);
+        $result = '';
+        if (!empty($currentPreviousDiff)) {
+            $strings = [];
+            foreach ($currentPreviousDiff as $i => $value) {
+                $strings[] = ($i + 1) . ') ' . $value;
+            }
+            $result .= '<div>в предыдущем тексте нет:</div><code>' . implode('<br>', $strings) . '</code>';
+        }
+        if (!empty($previousCurrentDiff)) {
+            $strings = [];
+            foreach ($previousCurrentDiff as $i => $value) {
+                $strings[] = ($i + 1) . ') ' . $value;
+            }
+            $result .= '<div>в текущем тексте нет:</div><code>' . implode('<br>', $strings) . '</code>';
+        }
+
+        return empty($result) ? '-тексты одинаковы-' : $result;
+    }
+
+    /**
+     * Разбивает строку согласно сразу нескольким делиметрам:
+     * @param string $string - строка которую нужно разбить
+     * @param array $delimiters - разделители, по которым нужно разбить, например ["<br>", "</p>", "\n"]
+     * @return array - список строк в результате разбития
+     */
+    public function multiExplode(string $string, array $delimiters): array
+    {
+        $ready = str_replace($delimiters, $delimiters[0], $string);
+        return explode($delimiters[0], $ready);
+    }
 }
