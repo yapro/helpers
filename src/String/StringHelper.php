@@ -213,4 +213,10 @@ class StringHelper
         $ready = str_replace($delimiters, $delimiters[0], $string);
         return explode($delimiters[0], $ready);
     }
+
+    public function explodi(string $delimiter, string $string): array
+    {
+        // альтернатива: preg_split("/'.preg_quote($delimiter, '/').'/ui", $text);
+        return explode($delimiter, str_ireplace($delimiter, $delimiter, $string));
+    }
 }
