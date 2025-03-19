@@ -91,6 +91,7 @@ class ArrayHelperTest extends TestCase
         $expected = [
             'key1' => [
                 'key2' => [
+                    // тут keyX ключ, а value1 заменено на value2
                     'keyX' => 'value2'
                 ],
                 'key3' => [
@@ -111,6 +112,7 @@ class ArrayHelperTest extends TestCase
         $expected = [
             'key1' => [
                 'key2' => [
+                    // тут keyX массив, с value1 и value2
                     'keyX' => [
                         'value1',
                         'value2',
