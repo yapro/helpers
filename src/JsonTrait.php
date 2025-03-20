@@ -140,8 +140,6 @@ trait JsonTrait
                     // Если значения совпадают, заменяем на null (если не сказано сохранить тип)
                     if (!in_array($key, $safeFields, true)) {
                         $value = null;
-                    } else {
-                        $x=1;
                     }
                 }
             }
