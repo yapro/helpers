@@ -92,4 +92,46 @@ class JsonHelperTest extends TestCase
         $data = json_decode($json);
         self::assertEquals($json, (new JsonHelper())->jsonEncode($data));
     }
+    
+    public function test_nullifyEqualFields()
+    {
+        $json1 = '{"name": "Alice", "age": 25, "city": "New York", "details": {"height": 170, "weight": 60}}';
+        $json2 = '{"name": "Alice", "age": 30, "city": "New York", "details": {"height": 170, "weight": 65}}';
+
+        $expectedJson = '{
+    "name": null,
+    "age": 25,
+    "city": null,
+    "details": {
+        "height": null,
+        "weight": 60
+    }
+}';
+
+        $result = (new JsonHelper())->nullifyEqualFields($json1, $json2);
+
+        $this->assertJsonStringEqualsJsonString($expectedJson, $result);
+    }
+
+    public function test_nullifyEqualFieldsEmptyJson()
+    {
+        $json1 = '{}';
+        $json2 = '{}';
+
+        $expectedJson = '[]';
+        $result = (new JsonHelper())->nullifyEqualFields($json1, $json2);
+
+        $this->assertJsonStringEqualsJsonString($expectedJson, $result);
+    }
+
+    public function test_nullifyEqualFieldsDifferentKeys()
+    {
+        $json1 = '{"name": "Alice", "age": 25}';
+        $json2 = '{"city": "New York"}';
+
+        $expectedJson = '{"name": "Alice", "age": 25}';
+        $result = (new JsonHelper())->nullifyEqualFields($json1, $json2);
+
+        $this->assertJsonStringEqualsJsonString($expectedJson, $result);
+    }
 }

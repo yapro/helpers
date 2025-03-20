@@ -100,5 +100,52 @@ trait JsonTrait
         }
         return $data;
     }
+
+    /**
+     * Сравнивает два JSON-объекта и заменяет совпадающие значения на null (в первом json).
+     *
+     * @param string $json1 Первый JSON-объект
+     * @param string $json2 Второй JSON-объект
+     * @param array $safeFields Поля, которые сохраняют свое значение при совпадении
+     * @return string $json1-объект с заменёнными значениями
+     */
+    public function nullifyEqualFields(string $json1, string $json2, array $safeFields = []): string
+    {
+        // Декодируем JSON в массивы
+        $arr1 = $this->jsonDecode($json1, true);
+        $arr2 = $this->jsonDecode($json2, true);
+
+        // Рекурсивная обработка массивов
+        $this->nullifyMatches($arr1, $arr2, $safeFields);
+
+        // Возвращаем изменённый JSON
+        return $this->jsonEncode($arr1);
+    }
+
+    /**
+     * Рекурсивно проверяет и заменяет совпадающие значения на null.
+     *
+     * @param array &$arr1 Первый массив (изменяется)
+     * @param array $arr2 Второй массив
+     * @param array $safeFields Поля, которые сохраняют свое значение при совпадении
+     */
+    private function nullifyMatches(array &$arr1, array $arr2, array $safeFields = []): void
+    {
+        foreach ($arr1 as $key => &$value) {
+            if (array_key_exists($key, $arr2)) {
+                if (is_array($value) && is_array($arr2[$key])) {
+                    // Рекурсивно проверяем вложенные массивы
+                    $this->nullifyMatches($value, $arr2[$key], $safeFields);
+                } elseif ($value === $arr2[$key]) {
+                    // Если значения совпадают, заменяем на null (если не сказано сохранить тип)
+                    if (!in_array($key, $safeFields, true)) {
+                        $value = null;
+                    } else {
+                        $x=1;
+                    }
+                }
+            }
+        }
+    }
 }
 
