@@ -37,7 +37,7 @@ class StringHelperTest extends TestCase
     public function testGetHtmlWithoutIndentions(string $html, string $expected): void
     {
         $object = new StringHelper();
-        $actual = $object->getHtmlWithoutIndentions($html);
+        $actual = $object->getHtmlWithoutIndents($html);
         $this->assertSame($expected, $actual);
     }
     

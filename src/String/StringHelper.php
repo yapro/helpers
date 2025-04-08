@@ -37,7 +37,7 @@ class StringHelper
 
     // убирает отступы у строк слева, чтобы когда мы заменим PHP_EOL на '</p><p>', мы спокойно убрали лишние теги,
     // например до функции было: '<ul>\n  <li>', а после '<ul>\n<li>'
-    public function getHtmlWithoutIndentions(string $html)
+    public function getHtmlWithoutIndents(string $html)
     {
         // делаем единообразные переносы строк (вдруг попадется текст написанный на Windows):
         $html = str_replace("\r\n", PHP_EOL, $html);
