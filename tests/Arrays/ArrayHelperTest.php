@@ -97,7 +97,7 @@ class ArrayHelperTest extends TestCase
             ],
             'смешанные значения' => [
                 [1, '2', '3.0', 'hello', 4.5, '4.5', true, false],
-                [1, 2],
+                [1, 2, 3],
             ],
             'с нулем и null' => [
                 [0, '0', null],
