@@ -83,4 +83,39 @@ class ArrayHelperTest extends TestCase
             ]
         ];
     }
+
+    public static function providerFilterIntegers(): array
+    {
+        return [
+            'только целые числа' => [
+                [1, 2, 3],
+                [1, 2, 3],
+            ],
+            'строки с целыми' => [
+                ['1', '02', '003'],
+                [1, 2, 3],
+            ],
+            'смешанные значения' => [
+                [1, '2', '3.0', 'hello', 4.5, '4.5', true, false],
+                [1, 2],
+            ],
+            'с нулем и null' => [
+                [0, '0', null],
+                [0, 0],
+            ],
+            'пустой массив' => [
+                [],
+                [],
+            ],
+        ];
+    }
+    
+    /**
+     * @dataProvider providerFilterIntegers
+     */
+    public function testFilterIntegers(array $input, array $expected)
+    {
+        $arrayHelper = new ArrayHelper();
+        $this->assertSame($expected, $arrayHelper->filterIntegers($input));
+    }
 }

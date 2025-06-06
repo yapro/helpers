@@ -181,4 +181,20 @@ class ArrayHelper
         }
         $current = $value;
     }
+
+    // Пример использования
+    // $array = [1, '2', '003', 'hello', 4.5, '4.5', 6, null, true, false];
+    // $filtered = filterIntegers($array);
+    function filterIntegers(array $input): array {
+        $result = [];
+
+        foreach ($input as $value) {
+            // Проверка: значение числовое, не bool, и без дробной части
+            if (is_numeric($value) && !is_bool($value) && (int)$value == $value) {
+                $result[] = (int)$value;
+            }
+        }
+
+        return $result;
+    }
 }
