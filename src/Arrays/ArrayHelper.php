@@ -104,25 +104,32 @@ class ArrayHelper
     }
 
     /**
-     * Example: getIntegerTail($userId, count($users)) or getIntegerTail($name, count($messages))
+     * Возвращает номер итерации, которую нужно передать в метод getIteration().
+     * Example: getIntegerTail($userId, count($cars)) or getIntegerTail($userName, count($messages))
      * 
-     * @param int|string $value
-     * @param int $quantity
+     * @param int|string $value - из него получается число, последние цифры которого будут возвращены
+     * @param int $quantity - число, на которое будет похож результат, например при $quantity = 500, результат будет 123
      * @return int
      */
     public function getIntegerTail($value, int $quantity): int
     {
-        if (is_numeric($value)) {
-            $value = (string) $value;
+        // На 64-битных системах crc32() возвращает всегда положительное число, диапазон от 0 до 4294967295 (т.е. полный диапазон uint32).
+        $quantityLength = mb_strlen((string) $quantity);
+        if ($quantityLength > 15) {
+            trigger_error('hexdec can create a large numeric for the ' . $quantity);
         }
-        // На 64-битных платформах все результаты crc32() будут положительными целыми.
-        return (int) mb_substr((string) crc32((string) $value), -mb_strlen((string) $quantity));
+        $hash = substr(md5((string) $value), 0, 15); // нам нужно менее 15 символов, чтобы hexdec выдал int (если больше, о может быть float)
+        $bigInt = hexdec($hash); // положительное целое число до ~10^18
+
+        return (int) mb_substr((string) $bigInt, -$quantityLength);
     }
+    
+    public const MAX_SAFE_TAIL = 999999999999999; // максимально возможный результат работы функции getIntegerTail
 
     /**
      * Example:
-     * $userIdentity = $this->getIntegerTail($userName, count($users));
-     * $permanentUserChoise = $this->getIteration($userIdentity, $cars);
+     * $userNumber = $this->getIntegerTail($userName, count($cars));
+     * $permanentUserChoise = $this->getIteration($userNumber, $cars);
      * 
      * @param int $necessaryIteration
      * @param array $items
@@ -140,6 +147,26 @@ class ArrayHelper
         }
 
         return null;
+    }
+    
+    // Тоже самое, что getIteration, но возвращает часть массива, словно функця array_slice()
+    public function getItemsFromIteration(array $items, int $fromIteration, int $limit = 1): array
+    {
+        $result = [];
+        $iterator = new InfiniteIterator(new ArrayIterator($items));
+        $iterationNumber = 0;
+        $maxIterationNumber = $fromIteration + $limit;
+        foreach ($iterator as $item) {
+            if ($iterationNumber >= $fromIteration) {
+                $result[] = $item;
+            }
+            $iterationNumber++;
+            if ($iterationNumber === $maxIterationNumber) {
+                break;
+            }
+        }
+
+        return $result;
     }
 
     public function fill(array &$array)

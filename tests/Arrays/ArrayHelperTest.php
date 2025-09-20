@@ -118,4 +118,42 @@ class ArrayHelperTest extends TestCase
         $arrayHelper = new ArrayHelper();
         $this->assertSame($expected, $arrayHelper->filterIntegers($input));
     }
+
+    public function integerTailProvider(): array
+    {
+        return [
+            // value, quantity, expectedLength, expected
+            ["user123", 10,         2, 61],   // quantity=10 → хвост из 2 цифр
+            ["user123", 100,        3, 761],  // quantity=100 → хвост из 3 цифр
+            ["user123", 9999,       4, 7761], // quantity=9999 → хвост из 4 цифр
+            ["user123", 12345,      5, 37761],
+            ["user123", 123456789,  9, 870737761],
+            [123456789, 15,         2, 11],   // int тоже работает
+        ];
+    }
+
+    /**
+     * @dataProvider integerTailProvider
+     */
+    public function testGetIntegerTail($value, int $quantity, int $expectedLength, int $expected)
+    {
+        $helper = new ArrayHelper();
+        $result = $helper->getIntegerTail($value, $quantity);
+        $this->assertSame($expected, $result);
+        // Проверяем, что результат — число
+        $this->assertIsInt($result);
+
+        // Проверяем, что длина результата соответствует длине quantity
+        $this->assertEquals(
+            strlen((string)$quantity),
+            strlen((string)$result),
+            "Длина хвоста должна совпадать с количеством символов quantity"
+        );
+
+        // Количество цифр результата не превышает длину quantity
+        $this->assertLessThanOrEqual($expectedLength, strlen((string)$result));
+
+        // Дополнительно: число неотрицательное
+        $this->assertGreaterThanOrEqual(0, $result);
+    }
 }
