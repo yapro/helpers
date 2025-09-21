@@ -156,9 +156,9 @@ class ArrayHelper
         $iterator = new InfiniteIterator(new ArrayIterator($items));
         $iterationNumber = 0;
         $maxIterationNumber = $fromIteration + $limit;
-        foreach ($iterator as $item) {
+        foreach ($iterator as $key => $item) {
             if ($iterationNumber >= $fromIteration) {
-                $result[] = $item;
+                $result[$key] = $item;
             }
             $iterationNumber++;
             if ($iterationNumber === $maxIterationNumber) {
