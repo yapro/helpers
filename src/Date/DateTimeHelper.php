@@ -22,7 +22,7 @@ class DateTimeHelper
         // @todo вместо точки лучше использовать тире, потому что например 2019.06.26 вызывает ошибку спецификации
         $dateTime = new \DateTime(str_replace('/', '.', $date), $timezone);
         $result = \DateTime::getLastErrors();
-        if ($result['warning_count']) {
+        if ($result['warning_count'] ?? null) {
             throw new \UnexpectedValueException(implode(', ', $result['warnings']));
         }
         return $dateTime;
@@ -38,7 +38,7 @@ class DateTimeHelper
     {
         $dateTime = new \DateTimeImmutable($date, $timezone);
         $result = \DateTimeImmutable::getLastErrors();
-        if ($result['warning_count']) {
+        if ($result['warning_count'] ?? null) {
             throw new \UnexpectedValueException(implode(', ', $result['warnings']));
         }
         return $dateTime;
