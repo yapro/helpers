@@ -224,4 +224,14 @@ class StringHelper
         // альтернатива: preg_split("/'.preg_quote($delimiter, '/').'/ui", $text);
         return explode($delimiter, str_ireplace($delimiter, $delimiter, $string));
     }
+
+    // Синтаксис $result = $str ?: '' работает плохо, ведь при $str === '0', будет $result = '' + не делается trim при проверке и результате
+    public static function getNotEmptyTrimmed(string $value, string $defaut = ''): string
+    {
+        $result = trim($value); // обрезаем, на всякий случай
+        if ($result === '') { // empty($value) нельзя, ведь empty('0') возвращает true
+            return trim($defaut); // обрезаем, на всякий случай
+        }
+        return $result;
+    }
 }
