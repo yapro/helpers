@@ -95,7 +95,7 @@ class StringHelper
         }
     }
 
-    // Преобразовывает первый символ строки в верхний регистр
+    // Склонение существительных, например echo noneWithNum(7, 'яблоко', 'яблока', 'яблок'); выдаст: 7 яблок
     public function noneWithNum($num = 0, string $str1 = '', string $str2 = '', string $str5 = ''): string
     {
         return $num . ' ' . $this->noun($num, $str1, $str2, $str5);
