@@ -13,12 +13,12 @@ class StringHelper
     public function getWithoutInvisibleSymbols(string $string, bool $removeDoubleBlanks = true): string
     {
         $remove = str_replace('U+', '\x{', str_replace(',', '}', $this->invisibleSymbols));
-        $withoutInvisible = preg_replace('/['.$remove.']/u', ' ', $string);
-        if ($removeDoubleBlanks) {
-            $withoutDoubleBlanks = preg_replace('/ {2,}/', ' ', $withoutInvisible);
+        $result = preg_replace('/['.$remove.']/u', ' ', $string);
+        if ($result && $removeDoubleBlanks) {
+            $result = preg_replace('/ {2,}/', ' ', $result);
         }
 
-        return $withoutDoubleBlanks;
+        return $result ?? '';
     }
 
     public function getRandomPopularNounsAsString(int $count, string $delimeter = ', '): string
@@ -122,11 +122,11 @@ class StringHelper
     public function cleanup(string $string): string
     {
         $result = preg_replace('/[^\p{Cyrillic}\p{Common}\p{Latin}]+/u', '', $string);
-        if (!empty($result)) {
-            $string = $result;
+        if (empty($result)) {
+            return '';
         }
 
-        return $this->getWithoutInvisibleSymbols($string);
+        return $this->getWithoutInvisibleSymbols($result);
     }
 
     public function getCleanedTextWhereEachSentenceAsNewLine(?string $string): string

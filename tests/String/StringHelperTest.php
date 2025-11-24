@@ -171,4 +171,70 @@ class StringHelperTest extends TestCase
         $result = (new StringHelper())->cleanup($input);
         $this->assertEquals($expected, $result);
     }
+
+    public function providerGetWithoutInvisibleSymbols(): array
+    {
+        // Несколько невидимых символов для тестов
+        // U+200B = ZERO WIDTH SPACE
+        $zwsp = "\u{200B}";
+        // U+00A0 = NO-BREAK SPACE
+        $nbsp = "\u{00A0}";
+        // U+2800 = INVISIBLE SEPARATOR
+        $inv  = "\u{2800}";
+
+        return [
+
+            // 1. Полное удаление невидимых символов + сжатие пробелов
+            "remove invisible + collapse" => [
+                "input"    => "Привет{$zwsp}мир{$nbsp}!",
+                "expected" => "Привет мир !",
+                "removeDoubleBlanks" => true
+            ],
+
+            // 2. Без сжатия пробелов
+            "no collapsing blanks" => [
+                "input"    => "Тест{$zwsp}{$zwsp}строка",
+                // невидимые символы заменяются на пробелы, но не схлопываются
+                "expected" => "Тест  строка",
+                "removeDoubleBlanks" => false
+            ],
+
+            // 3. Чистая строка — не меняется
+            "clean string" => [
+                "input"    => "Hello world",
+                "expected" => "Hello world",
+                "removeDoubleBlanks" => true
+            ],
+
+            // 4. Только невидимые символы
+            "only invisible" => [
+                "input"    => $zwsp . $nbsp . $inv,
+                "expected" => "", // превращаются в пробелы -> схлопываются -> пусто
+                "removeDoubleBlanks" => true
+            ],
+
+            // 5. Смешанное: много подряд разных невидимых символов
+            "mixed combined invisible" => [
+                "input"    => "A{$zwsp}{$inv}{$nbsp}{$zwsp}B",
+                "expected" => "A B",
+                "removeDoubleBlanks" => true
+            ],
+
+            // 6. Проверка, что \n НЕ удаляется и НЕ считается невидимым
+            "new line stays" => [
+                "input"    => "A{$zwsp}B\nC",
+                "expected" => "A B\nC",
+                "removeDoubleBlanks" => true
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerGetWithoutInvisibleSymbols
+     */
+    public function testGetWithoutInvisibleSymbols(string $input, string $expected, bool $removeDoubleBlanks = true)
+    {
+        $helper = new StringHelper();
+        $this->assertSame($expected, $helper->getWithoutInvisibleSymbols($input, $removeDoubleBlanks));
+    }
 }
