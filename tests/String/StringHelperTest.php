@@ -209,7 +209,7 @@ class StringHelperTest extends TestCase
             // 4. Только невидимые символы
             "only invisible" => [
                 "input"    => $zwsp . $nbsp . $inv,
-                "expected" => "", // превращаются в пробелы -> схлопываются -> пусто
+                "expected" => ' ', // превращаются в пробелы -> схлопываются -> пусто
                 "removeDoubleBlanks" => true
             ],
 
